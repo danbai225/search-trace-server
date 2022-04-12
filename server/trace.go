@@ -1,6 +1,7 @@
 package server
 
 import (
+	"search-trace-server/db"
 	"search-trace-server/modle"
 )
 

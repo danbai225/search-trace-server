@@ -20,7 +20,7 @@ var C = Config{}
 
 func Load() error {
 	f := "conf.json"
-	env := os.ExpandEnv("CONF_NAME")
+	env := os.Getenv("CONF_NAME")
 	if env != "" {
 		f = env
 	}
