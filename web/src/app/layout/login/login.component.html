@@ -1,0 +1,47 @@
+  <div  class="bg" nz-row>
+    <div nz-col nzXs="4" nzSm="4" nzMd="6" nzLg="8" nzXl="10"></div>
+    <div nz-col nzXs="16" nzSm="16" nzMd="12" nzLg="8" nzXl="4">
+      <article nz-typography>
+        <h1 nz-typography> 寻迹<fa-icon [icon]="faCoffee" [spin]="true"  size="lg"  ></fa-icon></h1>
+        <p nz-typography>
+          搜索浏览内容
+          <span nz-typography><kbd>Esc</kbd></span>
+          to exist...
+        </p>
+      </article>
+      <div>
+        <h3>登录</h3>
+        <form nz-form    class="login-form" >
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your username!">
+              <nz-input-group nzPrefixIcon="user">
+                <input type="text" nz-input formControlName="userName" placeholder="Username" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your Password!">
+              <nz-input-group nzPrefixIcon="lock">
+                <input type="password" nz-input formControlName="password" placeholder="Password" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <div nz-row class="login-form-margin">
+            <div nz-col [nzSpan]="12">
+              <label nz-checkbox formControlName="remember">
+                <span>Remember me</span>
+              </label>
+            </div>
+            <div nz-col [nzSpan]="12">
+              <a class="login-form-forgot">Forgot password</a>
+            </div>
+          </div>
+          <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'" (click)="handlelogin()">Log in</button>
+          Or
+          <span>------------</span>
+          <a>register now!</a>
+        </form>
+      </div>
+    </div>
+    <div nz-col nzXs="4" nzSm="4" nzMd="6" nzLg="8" nzXl="10"></div>
+  </div>
