@@ -1,14 +1,13 @@
-package main
+package test
 
 import (
 	logs "github.com/danbai225/go-logs"
 	"search-trace-server/config"
 	"search-trace-server/db"
-	"search-trace-server/http"
 )
 
-func main() {
-	err := config.Load()
+func init() {
+	err := config.LoadF("../conf-dev.json")
 	if err != nil {
 		logs.Err(err)
 		return
@@ -18,5 +17,4 @@ func main() {
 		logs.Err(err)
 		return
 	}
-	http.Start()
 }

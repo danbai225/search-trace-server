@@ -13,13 +13,17 @@ type Config struct {
 		User   string `json:"user"`
 		Pass   string `json:"pass"`
 		Port   int    `json:"port"`
+		Debug  bool   `json:"debug"`
 	} `json:"db"`
 }
 
 var C = Config{}
+var f = ""
 
 func Load() error {
-	f := "conf.json"
+	if f == "" {
+		f = "conf.json"
+	}
 	env := os.Getenv("CONF_NAME")
 	if env != "" {
 		f = env
@@ -28,9 +32,13 @@ func Load() error {
 	if err != nil {
 		return err
 	}
-	json.Unmarshal(file, &C)
+	err = json.Unmarshal(file, &C)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+func LoadF(conf string) error {
+	f = conf
+	return Load()
 }
