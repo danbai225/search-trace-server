@@ -2,16 +2,19 @@ package server
 
 import (
 	"search-trace-server/db"
-	"search-trace-server/modle"
+	"search-trace-server/model"
 )
 
-func AddTrace(trace *modle.Trace) error {
+// TraceCreate 新建记录
+func TraceCreate(trace *model.Trace) (err error) {
 	begin := db.GetDB()
-	err := begin.Create(trace).Error
-	if err != nil {
-		begin.Callback()
-	} else {
-		begin.Commit()
-	}
+	defer func() {
+		if err != nil {
+			begin.Callback()
+		} else {
+			begin.Commit()
+		}
+	}()
+	err = begin.Create(trace).Error
 	return err
 }

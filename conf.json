@@ -4,6 +4,7 @@
     "db_name": "",
     "user": "",
     "pass": "",
-    "port": 0
+    "port": 0,
+    "debug": true
   }
 }

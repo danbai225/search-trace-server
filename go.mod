@@ -1,10 +1,12 @@
 module search-trace-server
 
-go 1.18
+go 1.17
 
 require (
 	github.com/danbai225/go-logs v0.0.9
 	github.com/gogf/gf/v2 v2.0.6
+	github.com/gogf/guuid v1.0.0
+	github.com/muesli/cache2go v0.0.0-20211005105910-8e46465cca4a
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.4
 )
@@ -19,6 +21,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/goccy/go-json v0.7.4 // indirect
+	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/grokify/html-strip-tags-go v0.0.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
