@@ -14,7 +14,7 @@ func cGetToken() func(r *ghttp.Request) {
 	return func(r *ghttp.Request) {
 		req := &cGetTokenReq{}
 		if err := r.Parse(req); err != nil {
-			r.Response.WriteJsonExit(Msg{
+			_ = r.Response.WriteJsonExit(Msg{
 				Code: errCode,
 				Msg:  err.Error(),
 			})

@@ -12,6 +12,6 @@ func cTraceAdd() func(r *ghttp.Request) {
 		if err := r.Parse(trace); err != nil {
 			return
 		}
-		server.AddTrace(trace)
+		_ = server.AddTrace(trace)
 	}
 }
