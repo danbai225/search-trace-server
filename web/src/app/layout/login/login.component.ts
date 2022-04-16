@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faCoffee,faUser } from '@fortawesome/free-solid-svg-icons';
+import { WebServerService } from "../../server/web-server.service";
 
 @Component({
   selector: 'app-login',
@@ -9,10 +10,14 @@ import { faCoffee,faUser } from '@fortawesome/free-solid-svg-icons';
 export class LoginComponent implements OnInit {
   faCoffee = faCoffee;
   user = faUser;
-  constructor() {}
+  constructor(private Server: WebServerService) {}
 
   ngOnInit(): void {
+    this.Server.getLogin();
+
 
   }
+  handlelogin(){
 
+  }
 }
