@@ -13,7 +13,7 @@ type cUserInfoRes struct {
 
 func cUserInfo() func(r *ghttp.Request) {
 	return func(r *ghttp.Request) {
-		u := r.GetCtxVar("user").Interface().(*model.User)
+		u := r.Context().Value("user").(*model.User)
 		_ = r.Response.WriteJson(Msg{}.ok(cUserInfoRes{
 			Name:  u.Name,
 			Email: u.Email,

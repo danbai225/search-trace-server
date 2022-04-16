@@ -5,7 +5,8 @@ import (
 	"search-trace-server/model"
 )
 
-func AddTrace(trace *model.Trace) (err error) {
+// TraceCreate 新建记录
+func TraceCreate(trace *model.Trace) (err error) {
 	begin := db.GetDB()
 	defer func() {
 		if err != nil {

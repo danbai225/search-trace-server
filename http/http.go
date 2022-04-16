@@ -9,12 +9,18 @@ func Start() {
 	s := g.Server()
 	s.SetPort(49492)
 	s.BindMiddleware("/*", MiddlewareCORS)
-	s.BindHandler("/trace/add", cTraceAdd())
 	api := s.Group("/api")
 	api.POST("/get_token", cGetToken())
+
 	v1 := api.Group("/v1")
 	v1.Middleware(checkV1)
-	v1.GET("/user/info", cUserInfo())
+
+	userGroup := v1.Group("/user")
+	userGroup.GET("/info", cUserInfo())
+
+	traceGroup := v1.Group("/trace")
+	traceGroup.POST("/add", cTraceAdd())
+
 	s.Run()
 }
 func MiddlewareCORS(r *ghttp.Request) {
