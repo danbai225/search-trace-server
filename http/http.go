@@ -23,6 +23,9 @@ func Start() {
 	traceGroup.POST("/add", cTraceAdd())
 	traceGroup.GET("/search_keyword", cTraceSearchKeyword())
 
+	wordGroup := v1.Group("/word")
+	wordGroup.GET("/associate", cWordAssociate())
+
 	s.Run()
 }
 func MiddlewareCORS(r *ghttp.Request) {

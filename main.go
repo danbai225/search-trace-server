@@ -5,6 +5,7 @@ import (
 	"search-trace-server/config"
 	"search-trace-server/db"
 	"search-trace-server/http"
+	"search-trace-server/server"
 )
 
 func main() {
@@ -18,5 +19,6 @@ func main() {
 		logs.Err(err)
 		return
 	}
+	server.InitWordServer()
 	http.Start()
 }

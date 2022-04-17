@@ -1,6 +1,7 @@
 package http
 
 import (
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"search-trace-server/model"
 	"search-trace-server/server"
@@ -45,7 +46,9 @@ func cTraceAdd() func(r *ghttp.Request) {
 }
 
 type cTraceSearchKeywordReq struct {
-	Key string `json:"key" v:"required#必填关键字"`
+	Key      string `json:"key" v:"required|min-length:2#必填关键字|长度最小2"`
+	PageSize int    `json:"page_size" v:"required|min:1|max:100#必填页大小|页面大小最小为1|页面大小最大为100"`
+	PageNum  int    `json:"page_num" v:"required|min:1#必填页数|页号最小为1"`
 }
 
 func cTraceSearchKeyword() func(r *ghttp.Request) {
@@ -58,9 +61,14 @@ func cTraceSearchKeyword() func(r *ghttp.Request) {
 			})
 			return
 		}
-		list, err := server.TraceSearchForKeyword(req.Key)
+		u := r.Context().Value("user").(*model.User)
+		list, PageTotal, err := server.TraceSearchForKeyword(u.Name, req.Key, req.PageSize, req.PageNum)
 		if err == nil {
-			_ = r.Response.WriteJson(Msg{}.ok(list))
+			_ = r.Response.WriteJson(Msg{}.ok(g.Map{
+				"list":       list,
+				"page_total": PageTotal,
+				"page_num":   req.PageNum,
+			}))
 		} else {
 			_ = r.Response.WriteJson(Msg{}.err("搜索失败"))
 		}
