@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
 import { RouteRoutingModule } from './routes/routes-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from "../app/shared/shared-module";
+
 
 
 
@@ -18,7 +18,6 @@ import { SharedModule } from "../app/shared/shared-module";
     RouteRoutingModule,
     SharedModule,
     HttpClientModule
-
   ],
   providers: [],
   bootstrap: [AppComponent]

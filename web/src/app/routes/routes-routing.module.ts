@@ -4,11 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
-  // passport
   { path: '', loadChildren: () => import('../layout/+module').then(m => m.LoginModule) },
+  { path: '',loadChildren:() => import('../routes/page/+module').then(m => m.HomeModule)},
   // { path: 'exception', loadChildren: () => import('./exception/exception.module').then(m => m.ExceptionModule) },
   // 单页不包裹Layout
-  { path: '**', redirectTo: 'exception/404' }
+  // { path: '**', redirectTo: 'exception/404' }
 ];
 
 @NgModule({

@@ -4,12 +4,14 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { IconDefinition } from '@ant-design/icons-angular';
 import {
   LockOutline,
-  UserOutline
+  UserOutline,
+  SearchOutline
 } from '@ant-design/icons-angular/icons';
 
 const icons: IconDefinition[] = [
   UserOutline,
-  LockOutline
+  LockOutline,
+  SearchOutline
 ];
 @NgModule({
   declarations: [],
