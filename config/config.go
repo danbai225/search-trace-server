@@ -7,7 +7,8 @@ import (
 )
 
 type Config struct {
-	Db struct {
+	LiteMode bool `json:"lite_mode"`
+	Db       struct {
 		Host   string `json:"host"`
 		DbName string `json:"db_name"`
 		User   string `json:"user"`

@@ -4,9 +4,11 @@ go 1.17
 
 require (
 	github.com/danbai225/go-logs v0.0.9
+	github.com/go-ego/gse v0.70.0
 	github.com/gogf/gf/v2 v2.0.6
 	github.com/gogf/guuid v1.0.0
 	github.com/muesli/cache2go v0.0.0-20211005105910-8e46465cca4a
+	github.com/yanyiwu/gojieba v1.1.2
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.4
 )
@@ -33,6 +35,7 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
+	github.com/vcaesar/cedar v0.20.0 // indirect
 	go.opentelemetry.io/otel v1.0.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.0.0 // indirect
 	go.opentelemetry.io/otel/trace v1.0.0 // indirect

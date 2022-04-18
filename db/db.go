@@ -21,9 +21,15 @@ func InitDB() error {
 	initCache()
 	return err
 }
-func GetDB() *gorm.DB {
+func GetDBW() *gorm.DB {
 	if config.C.Db.Debug {
 		return db.Debug().Begin()
 	}
 	return db.Begin()
+}
+func GetDBR() *gorm.DB {
+	if config.C.Db.Debug {
+		return db.Debug().Begin()
+	}
+	return db
 }

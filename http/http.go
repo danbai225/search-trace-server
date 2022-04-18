@@ -9,6 +9,7 @@ func Start() {
 	s := g.Server()
 	s.SetPort(49492)
 	s.BindMiddleware("/*", MiddlewareCORS)
+	s.BindHandler("/trace/add", cTraceAdd())
 	api := s.Group("/api")
 	api.POST("/get_token", cGetToken())
 
@@ -20,6 +21,10 @@ func Start() {
 
 	traceGroup := v1.Group("/trace")
 	traceGroup.POST("/add", cTraceAdd())
+	traceGroup.GET("/search_keyword", cTraceSearchKeyword())
+
+	wordGroup := v1.Group("/word")
+	wordGroup.GET("/associate", cWordAssociate())
 
 	s.Run()
 }
