@@ -11,7 +11,7 @@
       </article>
       <div>
         <h3>登录</h3>
-        <form nz-form    class="login-form" >
+        <form nz-form  [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()" >
           <nz-form-item>
             <nz-form-control nzErrorTip="Please input your username!">
               <nz-input-group nzPrefixIcon="user">
@@ -36,7 +36,7 @@
               <a class="login-form-forgot">Forgot password</a>
             </div>
           </div>
-          <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'" (click)="handlelogin()">Log in</button>
+          <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
           Or
           <span>------------</span>
           <a>register now!</a>

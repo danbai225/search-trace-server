@@ -1,0 +1,30 @@
+<div nz-row class="bg" nzAlign="top">
+  <div nz-col nzSpan="7"></div>
+  <div nz-col nzSpan="10" >
+    <div class="header">
+      <fa-icon [icon]="faWheelchair" [spin]="true"  size="5x"  ></fa-icon>
+    </div>
+    <div class="content" nzSearch>
+      <nz-card   [nzBodyStyle]="{'padding':'10px'}">
+        <nz-input-group  nzSize="large"  [nzSuffix]="suffixIconSearch">
+          <input type="search"   [(ngModel)]="searchString"   (change)="handleSearchChange(searchString)"  nz-input placeholder="在寻记上搜索历史内容"  />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <fa-icon [icon]="faSearch" (click)="handleSearch() " [spin]="true" ></fa-icon>
+        </ng-template>
+        <ul nz-list [nzDataSource]="data" nzSize="large">
+          <li nz-list-item *ngFor="let item of data" nzNoFlex>
+            <ul nz-list-item-actions>
+              <nz-list-item-action>
+                <fa-icon [icon]="faSearch" (click)="handleSearch() " [spin]="true" ></fa-icon>
+              </nz-list-item-action>
+            </ul>
+            {{ item }}
+          </li>
+        </ul>
+      </nz-card>
+
+    </div>
+  </div>
+  <div nz-col nzSpan="7"></div>
+</div>

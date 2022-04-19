@@ -84,5 +84,5 @@ export const SHARED_ZORRO_MODULES = [
   NzTreeSelectModule,
   NzUploadModule,
   NzSpaceModule,
-  NzStatisticModule
+  NzStatisticModule,
 ];
