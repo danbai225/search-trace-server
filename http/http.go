@@ -26,6 +26,9 @@ func Start() {
 	wordGroup := v1.Group("/word")
 	wordGroup.GET("/associate", cWordAssociate())
 
+	blacklistGroup := v1.Group("/blacklist")
+	blacklistGroup.GET("/list", cBlacklistList())
+	blacklistGroup.POST("/add", cBlacklistAdd())
 	s.Run()
 }
 func MiddlewareCORS(r *ghttp.Request) {

@@ -2,7 +2,7 @@ package http
 
 import (
 	"github.com/gogf/gf/v2/net/ghttp"
-	"search-trace-server/model"
+	"search-trace-server/ctx"
 )
 
 type cUserInfoRes struct {
@@ -11,13 +11,15 @@ type cUserInfoRes struct {
 	Role  int64  `json:"role"`
 }
 
-func cUserInfo() func(r *ghttp.Request) {
-	return func(r *ghttp.Request) {
-		u := r.Context().Value("user").(*model.User)
-		_ = r.Response.WriteJson(Msg{}.ok(cUserInfoRes{
-			Name:  u.Name,
-			Email: u.Email,
-			Role:  u.Role,
-		}))
+func cUserInfo() func(c *ghttp.Request) {
+	return func(c *ghttp.Request) {
+		func(c *ctx.Ctx) {
+			u := c.GetUser()
+			_ = c.Response.WriteJson(Msg{}.ok(cUserInfoRes{
+				Name:  u.Name,
+				Email: u.Email,
+				Role:  u.Role,
+			}))
+		}(&ctx.Ctx{Request: c})
 	}
 }
