@@ -33,7 +33,7 @@ RUN mkdir /build
 WORKDIR /build
 RUN git clone https://ghproxy.com/https://github.com/danbai225/search-trace-server
 #构建后端
-RUN cd search-trace-server
+WORKDIR /build/search-trace-server
 RUN go build
 #构建前端
 RUN cd web
