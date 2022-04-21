@@ -38,26 +38,28 @@ WORKDIR /build/web
 RUN cnpm install
 RUN cnpm run build
 
-FROM alpine:latest
+#FROM alpine:latest
 #运行环境
 
 LABEL maintainer="danbai@88.com"
 LABEL version="0.1"
 LABEL description="search-trace-server build image file"
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk update
+#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk update
 #需要如下链接操作,否则运行程序会提示not found
 RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 #时区
 ENV TZ=Asia/Shanghai
 RUN apk add --no-cache ca-certificates apache2-utils
 #配置时区为中国
-RUN apk add tzdata \
-    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" > /etc/timezone
+#RUN apk add tzdata \
+#    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+#    && echo "Asia/Shanghai" > /etc/timezone
 
 RUN mkdir /app
 WORKDIR /app
-COPY --from=build-env /build/search_trace /app/search_trace
-COPY --from=build-env /build/web/dist/web /app/dist
+#COPY --from=build-env /build/search_trace /app/search_trace
+#COPY --from=build-env /build/web/dist/web /app/dist
+RUN mv /build/search_trace /app/search_trace
+RUN mv /build/web/dist/web /app/dist
 RUN chmod +x /app/search_trace
 CMD ["sh"]
