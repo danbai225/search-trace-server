@@ -44,6 +44,7 @@ FROM alpine:latest
 LABEL maintainer="danbai@88.com"
 LABEL version="0.1"
 LABEL description="search-trace-server build image file"
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk update
 #需要如下链接操作,否则运行程序会提示not found
 RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 #时区
