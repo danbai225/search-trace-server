@@ -41,7 +41,6 @@ RUN cnpm run build
 FROM alpine:latest
 #运行环境
 LABEL maintainer="danbai@88.com"
-LABEL version="0.1"
 LABEL description="search-trace-server build image file"
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk update
 RUN apk --no-cache add tzdata ca-certificates libc6-compat libgcc libstdc++ apache2-utils
