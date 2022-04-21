@@ -32,13 +32,12 @@ RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
 RUN cnpm install webpack -g
 #拉取代码
 RUN mkdir /build
-WORKDIR /build
-ADD ./ /build/search-trace-server
+ADD ./ /build
 #构建后端
-WORKDIR /build/search-trace-server
-RUN go build -o server
+WORKDIR /build
+RUN go build -o search_trace
 #构建前端
-WORKDIR /build/search-trace-server/web
+WORKDIR /build/web
 RUN cnpm install
 RUN cnpm run build
 
@@ -60,7 +59,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
 
 RUN mkdir /app
 WORKDIR /app
-COPY --from=build-env /build/search-trace-server/server /app/server
-COPY --from=build-env /build/search-trace-server/web/dist/web /app/dist
-RUN chmod +x /app/server
+COPY --from=build-env /build/search_trace /app/search_trace
+COPY --from=build-env /build/web/dist/web /app/dist
+RUN chmod +x /app/search_trace
 CMD ["bash"]
