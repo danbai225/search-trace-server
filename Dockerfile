@@ -62,5 +62,5 @@ RUN mkdir /app
 WORKDIR /app
 COPY --from=build-env /build/search-trace-server/server /app/server
 COPY --from=build-env /build/search-trace-server/web/dist/web /app/dist
-RUN chmod +x /app/search-trace-server
+RUN chmod +x /app/server
 CMD ["bash"]
