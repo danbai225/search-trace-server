@@ -39,7 +39,6 @@ WORKDIR /build/search-trace-server
 RUN go build -o server
 #构建前端
 WORKDIR /build/search-trace-server/web
-ENV apiurl "http:"
 RUN cnpm install
 RUN cnpm run build
 
