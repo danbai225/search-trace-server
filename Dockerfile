@@ -58,4 +58,4 @@ WORKDIR /app
 COPY --from=build-env /build/search_trace /app/search_trace
 COPY --from=build-env /build/web/dist/web /app/dist
 RUN chmod +x /app/search_trace
-CMD ["sh"]
+CMD ["/app/search_trace"]

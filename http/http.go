@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 )
@@ -9,10 +10,19 @@ func Start() {
 	s := g.Server()
 	s.SetPort(49492)
 	s.BindMiddleware("/*", MiddlewareCORS)
+	baseDir := "./dist/"
+	s.BindHandler("GET://{name}.html", func(r *ghttp.Request) {
+		r.Response.ServeFile(fmt.Sprint(baseDir, r.Get("name").String(), ".html"))
+	})
+	s.BindHandler("GET://{name}.js", func(r *ghttp.Request) {
+		r.Response.ServeFile(fmt.Sprint(baseDir, r.Get("name").String(), ".js"))
+	})
+	s.BindHandler("GET://{name}.css", func(r *ghttp.Request) {
+		r.Response.ServeFile(fmt.Sprint(baseDir, r.Get("name").String(), ".css"))
+	})
 	s.BindHandler("/trace/add", cTraceAdd())
 	api := s.Group("/api")
 	api.POST("/get_token", cGetToken())
-
 	v1 := api.Group("/v1")
 	v1.Middleware(checkV1)
 

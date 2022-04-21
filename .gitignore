@@ -3,3 +3,4 @@ conf-dev.json
 /logs
 *.log
 /test/logs
+/dist
