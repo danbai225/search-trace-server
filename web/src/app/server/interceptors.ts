@@ -11,7 +11,7 @@ export class Interceptor implements HttpInterceptor {
             // 设置请求头
             req = req.clone({
                 setHeaders: {
-                    '_token': `${token}`,
+                    'token': `${token}`,
                     'Content-Type': 'application/json'
                 }
             });
