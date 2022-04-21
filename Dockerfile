@@ -38,7 +38,7 @@ WORKDIR /build/web
 RUN cnpm install
 RUN cnpm run build
 
-FROM alpine:last
+FROM alpine:latest
 #运行环境
 
 LABEL maintainer="danbai@88.com"
