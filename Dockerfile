@@ -33,7 +33,7 @@ RUN cnpm install webpack -g
 #拉取代码
 RUN mkdir /build
 WORKDIR /build
-RUN git clone https://ghproxy.com/https://github.com/danbai225/search-trace-server
+ADD ./ /build/search-trace-server
 #构建后端
 WORKDIR /build/search-trace-server
 RUN go build
