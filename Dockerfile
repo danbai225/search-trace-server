@@ -38,15 +38,16 @@ WORKDIR /build/web
 RUN cnpm install
 RUN cnpm run build
 
-FROM golang:alpine
+FROM alpine:latest
 #运行环境
 LABEL maintainer="danbai@88.com"
 LABEL version="0.1"
 LABEL description="search-trace-server build image file"
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk update
+RUN apk --no-cache add tzdata ca-certificates libc6-compat libgcc libstdc++ apache2-utils
 #时区
 ENV TZ=Asia/Shanghai
-RUN apk add --no-cache ca-certificates apache2-utils
+
 #配置时区为中国
 RUN apk add tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
