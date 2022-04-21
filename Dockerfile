@@ -10,6 +10,8 @@ RUN go env -w GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 #安装git
 RUN apk add git
+#安装gcc
+RUN apk add gcc g++ make
 #配置时区为中国
 RUN apk add tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
