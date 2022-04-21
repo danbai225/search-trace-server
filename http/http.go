@@ -4,24 +4,26 @@ import (
 	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"os"
 )
 
 func Start() {
 	s := g.Server()
 	s.SetPort(49492)
 	s.BindMiddleware("/*", MiddlewareCORS)
-	baseDir := "./dist/"
+	baseDir := "./dist"
+	index := fmt.Sprint(baseDir, "/index.html")
 	s.BindHandler("/", func(r *ghttp.Request) {
-		r.Response.ServeFile(fmt.Sprint(baseDir, "index.html"))
+		r.Response.ServeFile(index)
 	})
-	s.BindHandler("GET://{name}.html", func(r *ghttp.Request) {
-		r.Response.ServeFile(fmt.Sprint(baseDir, r.Get("name").String(), ".html"))
-	})
-	s.BindHandler("GET://{name}.js", func(r *ghttp.Request) {
-		r.Response.ServeFile(fmt.Sprint(baseDir, r.Get("name").String(), ".js"))
-	})
-	s.BindHandler("GET://{name}.css", func(r *ghttp.Request) {
-		r.Response.ServeFile(fmt.Sprint(baseDir, r.Get("name").String(), ".css"))
+	s.BindHandler("GET:/*", func(r *ghttp.Request) {
+		path := fmt.Sprint(baseDir, r.Request.URL.Path)
+		_, err := os.Stat(path)
+		if err != nil {
+			r.Response.ServeFile(index)
+			return
+		}
+		r.Response.ServeFile(path)
 	})
 	s.BindHandler("/trace/add", cTraceAdd())
 	api := s.Group("/api")
