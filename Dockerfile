@@ -1,9 +1,6 @@
 FROM golang:1.18-alpine AS build-env
 MAINTAINER DanBai
 
-#需要如下链接操作,否则运行程序会提示not found
-RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
-
 #修改镜像源为国内
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk update
 RUN go env -w GO111MODULE=on
@@ -47,6 +44,8 @@ FROM ubuntu:20.04
 LABEL maintainer="danbai@88.com"
 LABEL version="0.1"
 LABEL description="search-trace-server build image file"
+#需要如下链接操作,否则运行程序会提示not found
+RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 #时区
 ENV TZ=Asia/Shanghai
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
