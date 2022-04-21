@@ -11,6 +11,9 @@ func Start() {
 	s.SetPort(49492)
 	s.BindMiddleware("/*", MiddlewareCORS)
 	baseDir := "./dist/"
+	s.BindHandler("GET:/", func(r *ghttp.Request) {
+		r.Response.ServeFile(fmt.Sprint(baseDir, "index.html"))
+	})
 	s.BindHandler("GET://{name}.html", func(r *ghttp.Request) {
 		r.Response.ServeFile(fmt.Sprint(baseDir, r.Get("name").String(), ".html"))
 	})
