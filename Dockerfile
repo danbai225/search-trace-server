@@ -62,6 +62,6 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
 RUN mkdir /app
 WORKDIR /app
 COPY --from=build-env /build/search-trace-server /app/search-trace-server
-COPY --from=build-env /build/search-trace-server/web/dist /app/dist
+COPY --from=build-env /build/search-trace-server/web/dist/web /app/web
 RUN chmod +x /build/search-trace-server
 CMD ["/build/search-trace-server"]
