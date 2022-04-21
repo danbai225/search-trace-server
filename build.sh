@@ -1,2 +1,2 @@
 git pull
-docker build -t search-trace-server:build .
+docker build -t --no-cache search-trace-server:build .
