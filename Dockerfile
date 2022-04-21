@@ -38,7 +38,7 @@ RUN git clone https://ghproxy.com/https://github.com/danbai225/search-trace-serv
 WORKDIR /build/search-trace-server
 RUN go build
 #构建前端
-RUN cd web
+WORKDIR /build/search-trace-server/web
 RUN cnpm run build
 
 FROM ubuntu:20.04
