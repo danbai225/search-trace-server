@@ -38,7 +38,7 @@ WORKDIR /build/web
 RUN cnpm install
 RUN cnpm run build
 
-FROM ubuntu:20.04
+FROM alpine:last
 #运行环境
 
 LABEL maintainer="danbai@88.com"
@@ -48,13 +48,11 @@ LABEL description="search-trace-server build image file"
 RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 #时区
 ENV TZ=Asia/Shanghai
-RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
-          && apt-get update \
-          && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-          && apt-get install tzdata \
-          && apt-get clean \
-          && apt-get autoclean \
-          && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apk add --no-cache ca-certificates apache2-utils
+#配置时区为中国
+RUN apk add tzdata \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone
 
 RUN mkdir /app
 WORKDIR /app
