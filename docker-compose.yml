@@ -6,5 +6,6 @@ services:
     restart: always
     volumes:
       - ./conf.json:/app/conf.json
+      - ./logs/:/app/logs
     ports:
       - "49492:49492"
