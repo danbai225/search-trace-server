@@ -39,6 +39,7 @@ WORKDIR /build/search-trace-server
 RUN go build
 #构建前端
 WORKDIR /build/search-trace-server/web
+RUN cnpm install
 RUN cnpm run build
 
 FROM ubuntu:20.04
