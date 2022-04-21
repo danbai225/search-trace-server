@@ -20,13 +20,9 @@ RUN node -v
 RUN apk add npm
 RUN npm -v
 #npm 镜像
-RUN alias cnpm="npm --registry=https://registry.npmmirror.com \
---cache=$HOME/.npm/.cache/cnpm \
---disturl=https://npmmirror.com/mirrors/node \
---userconfig=$HOME/.cnpmrc"
-RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
+RUN npm config set registry https://registry.npmmirror.com
 
-RUN cnpm install webpack -g
+RUN npm install webpack -g
 #拉取代码
 RUN mkdir /build
 ADD ./ /build
@@ -35,8 +31,8 @@ WORKDIR /build
 RUN go build -o search_trace
 #构建前端
 WORKDIR /build/web
-RUN cnpm install
-RUN cnpm run build
+RUN npm install
+RUN npm run build
 
 FROM alpine:latest
 #运行环境
