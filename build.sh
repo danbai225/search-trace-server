@@ -1,5 +1,5 @@
 git pull
-tag=$(v=git describe --abbrev=0)
+tag=$(git describe --abbrev=0)
 
 if [[ tag =~ "fatal" ]]
 then
