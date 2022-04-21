@@ -36,7 +36,7 @@ WORKDIR /build
 ADD ./ /build/search-trace-server
 #构建后端
 WORKDIR /build/search-trace-server
-RUN go build
+RUN go build -o server
 #构建前端
 WORKDIR /build/search-trace-server/web
 ENV apiurl "http:"
@@ -61,7 +61,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
 
 RUN mkdir /app
 WORKDIR /app
-COPY --from=build-env /build/search-trace-server/search-trace-server /app/search-trace-server
+COPY --from=build-env /build/search-trace-server/server /app/server
 COPY --from=build-env /build/search-trace-server/web/dist/web /app/dist
 RUN chmod +x /app/search-trace-server
 CMD ["bash"]
