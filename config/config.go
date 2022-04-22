@@ -16,6 +16,7 @@ type Config struct {
 		Port   int    `json:"port"`
 		Debug  bool   `json:"debug"`
 	} `json:"db"`
+	Production bool `json:"production"`
 }
 
 var C = Config{}

@@ -8,12 +8,18 @@ import (
 	"github.com/gogf/gf/v2/os/glog"
 	"io"
 	"os"
+	"search-trace-server/config"
 )
 
 func Start() {
 	s := g.Server()
-
-	s.SetLogger(glog.NewWithWriter(io.MultiWriter(os.Stdout, logs.GetGinWriter())))
+	arr := []io.Writer{
+		logs.GetHttpWriter(),
+	}
+	if !config.C.Production {
+		arr = append(arr, os.Stdout)
+	}
+	s.SetLogger(glog.NewWithWriter(io.MultiWriter(arr...)))
 	s.SetPort(49492)
 	s.BindMiddleware("/*", MiddlewareCORS)
 	baseDir := "./dist"
