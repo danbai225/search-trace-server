@@ -14,6 +14,9 @@ func main() {
 		logs.Err(err)
 		return
 	}
+	if config.C.Production {
+		logs.SetRedirectStdLog()
+	}
 	err = db.InitDB()
 	if err != nil {
 		logs.Err(err)

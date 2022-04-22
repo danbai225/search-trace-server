@@ -5,4 +5,4 @@ conf-dev.json
 /test/logs
 /dist
 search-trace-server.exe
-search-trace-server`
+search-trace-server

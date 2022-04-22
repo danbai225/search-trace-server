@@ -6,7 +6,7 @@ import (
 	"search-trace-server/server"
 )
 
-const v1TokenKey string = "_token"
+const v1TokenKey string = "token"
 
 func checkV1(r *ghttp.Request) {
 	token := r.GetHeader(v1TokenKey)
