@@ -4,3 +4,5 @@ conf-dev.json
 *.log
 /test/logs
 /dist
+search-trace-server.exe
+search-trace-server`

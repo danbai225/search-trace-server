@@ -5,10 +5,8 @@ MAINTAINER DanBai
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk update
 RUN go env -w GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.cn,direct
-#安装git
-RUN apk add git
-#安装gcc
-RUN apk add gcc g++ make
+#安装所需工具
+RUN apk add gcc g++ make upx
 #配置时区为中国
 RUN apk add tzdata \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
@@ -28,7 +26,8 @@ RUN mkdir /build
 ADD ./ /build
 #构建后端
 WORKDIR /build
-RUN go build -o search_trace
+RUN go build -ldflags '-w -s' -o search_trace
+RUN upx search_trace
 #构建前端
 WORKDIR /build/web
 RUN npm install
