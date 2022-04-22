@@ -1,24 +1,34 @@
 .ant-layout{
   background-color: #FFFFFF;
   .ant-layout-header{
-    width: 60%;
+    width: 100%;
     display: flex;
     justify-content: center;
     background-color: #FFFFFF;
     margin-top: 1em;
     height: 100%;
     .content{
-      flex: 1 1 0;
+      flex: 1;
+      display: flex;
+      justify-content:space-between;
+      .ant-list-lg .ant-list-item:hover{
+        background-color:rgb(248, 249, 250);
+      }
       .ant-input-affix-wrapper{
         border-radius: 1em;
+      }
+      .input{
+        flex: 2;
+      }
+      .select{
+        flex: 1;
+        margin-left: 10px;
+        text-align: right;
       }
     }
   }
   .ant-layout-content{
     padding: 0px 50px;
-    .ant-list-lg .ant-list-item:hover{
-      background-color:rgb(248, 249, 250);
-    }
     .ant-typography{
       h6{
         font-size: 17px;
@@ -39,14 +49,19 @@
       }
     }
   }
-  .ant-layout-footer{
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    overflow: hidden;
-    z-index: 10000;
-    a{
-      padding-left: 1em;
+  .cover{
+    height: 70px;
+    .ant-layout-footer{
+      margin-top: 10px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      overflow: hidden;
+      z-index: 10000;
+      a{
+        padding-left: 1em;
+      }
     }
   }
+  
 }
