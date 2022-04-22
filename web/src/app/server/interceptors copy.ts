@@ -6,12 +6,11 @@ import { Observable } from 'rxjs';
 export class AuthInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
        const token :string | null = window.localStorage.getItem('token');
-       console.log(token)
         if (token) {
             // 设置请求头
             req = req.clone({
                 setHeaders: {
-                    '_token': `${token}`,
+                    'token': `${token}`,
                     'Content-Type': 'application/json'
                 }
             });

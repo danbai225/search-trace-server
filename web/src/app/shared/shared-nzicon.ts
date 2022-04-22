@@ -5,7 +5,7 @@ import { IconDefinition } from '@ant-design/icons-angular';
 import {
   LockOutline,
   UserOutline,
-  SearchOutline
+  SearchOutline,
 } from '@ant-design/icons-angular/icons';
 
 const icons: IconDefinition[] = [

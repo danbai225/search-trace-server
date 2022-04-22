@@ -1,30 +1,35 @@
-<div nz-row class="bg" nzAlign="top">
-  <div nz-col nzSpan="7"></div>
-  <div nz-col nzSpan="10" >
-    <div class="header">
-      <fa-icon [icon]="faWheelchair" [spin]="true"  size="5x"  ></fa-icon>
-    </div>
+<nz-layout>
+  <nz-header>
     <div class="content" nzSearch>
-      <nz-card   [nzBodyStyle]="{'padding':'10px'}">
         <nz-input-group  nzSize="large"  [nzSuffix]="suffixIconSearch">
-          <input type="search"   [(ngModel)]="searchString"   (change)="handleSearchChange(searchString)"  nz-input placeholder="在寻记上搜索历史内容"  />
+          <input type="search"   [(ngModel)]="searchString"   (ngModelChange)="handleSearchChange($event)"  nz-input placeholder="在寻记上搜索历史内容"  />
         </nz-input-group>
         <ng-template #suffixIconSearch>
-          <fa-icon [icon]="faSearch" (click)="handleSearch() " [spin]="true" ></fa-icon>
+          <fa-icon [icon]="faTimes" (click)="handleError() " ></fa-icon>
         </ng-template>
-        <ul nz-list [nzDataSource]="data" nzSize="large">
-          <li nz-list-item *ngFor="let item of data" nzNoFlex>
-            <ul nz-list-item-actions>
-              <nz-list-item-action>
-                <fa-icon [icon]="faSearch" (click)="handleSearch() " [spin]="true" ></fa-icon>
-              </nz-list-item-action>
-            </ul>
-            {{ item }}
-          </li>
-        </ul>
-      </nz-card>
-
+        <div class="result">
+          <ul nz-list [nzDataSource]="data" nzSize="large">
+            <li (click)="handleResule(item)" nz-list-item *ngFor="let item of data" nzNoFlex>
+              <ul nz-list-item-actions>
+                <nz-list-item-action>
+                  <fa-icon [icon]="faSearch" (click)="handleSearch() " [spin]="true" ></fa-icon>
+                </nz-list-item-action>
+              </ul>
+              {{ item }}
+            </li>
+          </ul>
+        </div>
     </div>
-  </div>
-  <div nz-col nzSpan="7"></div>
-</div>
+  </nz-header>
+  <nz-divider></nz-divider>
+  <nz-content>
+    <p>找到约 {{data?.length? data.length :0}} 条结果</p>
+    <article *ngIf="data" nz-typography>
+      <h6 nz-typography><a href="">ddddddddddddddddddddddddddddddddddddddddddddd我是一个链接</a><fa-icon [icon]="isDownUp?faAngleDown:faAngleUp" (click)="handleadIconDown()"fa-lg ></fa-icon><i (click)="handleTodo()" href="">{{isDownUp?jion:out}}</i></h6>
+      <p nz-typography>
+        list
+      </p>
+    </article>
+   </nz-content>
+  <nz-footer>Made with ❤ by SEARCH-TRACE-SERVER © 2022  Powered by   <a href="https://p00q.cn/">淡白</a>   <a href="https://www.bibooo.top/">Bibooo</a> </nz-footer>
+</nz-layout>

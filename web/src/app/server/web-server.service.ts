@@ -37,4 +37,15 @@ export class WebServerService {
         });
     })
      }
+  // 关键字搜索
+  getRequestKeyword(keyWord:string,page_size:number=10,page_num:number=1){
+    return new Promise((resolve,reject)=>{
+      this.http.get(`${this.baseUrl()}/api/v1/trace/search_keyword`,{
+        params:{key:keyWord,page_size,page_num}
+        }).subscribe(
+        data => {
+        resolve(data);
+        });
+    })
+  }
   }

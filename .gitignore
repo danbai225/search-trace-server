@@ -3,3 +3,6 @@ conf-dev.json
 /logs
 *.log
 /test/logs
+/dist
+search-trace-server.exe
+search-trace-server`

@@ -8,9 +8,13 @@ import { FormsModule} from '@angular/forms';
 
 // 拦截器
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+// 请求
 import { Interceptor } from "../server/interceptors";
+// 响应
+import { CatchErrorInjector } from "../server/CatchErrorInjector";
 const HttpInterceptorProviders = [
-  { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true }
+  { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: CatchErrorInjector, multi: true },
 ]
 @NgModule({
   declarations: [],

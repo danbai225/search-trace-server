@@ -1,6 +1,6 @@
 import { NgModule} from '@angular/core';
 import { SharedModule } from "../../shared/shared-module"
-import {  ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { PageRoutingModule } from './+routing';
 import { WebServerService } from "../../server/web-server.service"
 import { CommonModule } from '@angular/common';

@@ -5,7 +5,8 @@
 
 export const environment = {
   production: false,
-  apiUrl:'http://192.168.0.110:49492',
+  // apiUrl:'http://192.168.0.110:49492',
+     apiUrl:'https://trace.p00q.cn',
   // useHash: true,
   // api: {
   //   baseUrl: './',

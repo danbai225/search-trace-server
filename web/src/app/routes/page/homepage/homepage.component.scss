@@ -1,23 +1,52 @@
-.bg{
-  width: 100%;
-  height: 100vh;
-  background-image: url("../../../../assets/imager/home-bg.png");
-  background-size: cover;
-  display: flex;
-  align-items: safe center;
-  .header{
-    text-align: center;
-    margin-bottom: 20px;
+.ant-layout{
+  background-color: #FFFFFF;
+  .ant-layout-header{
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    background-color: #FFFFFF;
+    margin-top: 1em;
+    height: 100%;
+    .content{
+      flex: 1 1 0;
+      .ant-input-affix-wrapper{
+        border-radius: 1em;
+      }
+    }
   }
-  .content{
-    padding: 20px;
+  .ant-layout-content{
+    padding: 0px 50px;
+    .ant-list-lg .ant-list-item:hover{
+      background-color:rgb(248, 249, 250);
+    }
+    .ant-typography{
+      h6{
+        font-size: 17px;
+        a{
+          display: inline-block;
+          width: 20%;
+          overflow:hidden;
+          vertical-align: middle;
+          text-overflow:ellipsis;
+          white-space:nowrap;
+          word-break:keep-all;
+        }
+        i{
+          font-size: 13px;
+          cursor: pointer;
+          color: #1890ff;
+        }
+      }
+    }
   }
-
-
-  .ant-btn-group-sm>.ant-btn:only-child, .ant-btn-group-sm>span:only-child>.ant-btn, .ant-btn-group>.ant-btn:only-child, .ant-btn-group>span:only-child>.ant-btn, .ant-card {
-    border-radius: 20px;
-}
-.ant-input-affix-wrapper {
-  border: none !important;
-}
+  .ant-layout-footer{
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 10000;
+    a{
+      padding-left: 1em;
+    }
+  }
 }

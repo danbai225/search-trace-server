@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"search-trace-server/config"
+	"search-trace-server/model"
 )
 
 var db *gorm.DB
@@ -19,7 +20,11 @@ func InitDB() error {
 		},
 	})
 	initCache()
+	autoMigrate()
 	return err
+}
+func autoMigrate() {
+	_ = db.AutoMigrate(&model.User{}, &model.Blacklist{}, &model.Word{})
 }
 func GetDBW() *gorm.DB {
 	if config.C.Db.Debug {

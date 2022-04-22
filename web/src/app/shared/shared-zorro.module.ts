@@ -29,6 +29,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
@@ -66,6 +67,7 @@ export const SHARED_ZORRO_MODULES = [
   NzInputNumberModule,
   NzBreadCrumbModule,
   NzStepsModule,
+  NzTypographyModule,
   NzListModule,
   NzSwitchModule,
   NzRadioModule,
