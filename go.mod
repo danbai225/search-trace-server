@@ -3,7 +3,7 @@ module search-trace-server
 go 1.17
 
 require (
-	github.com/danbai225/go-logs v0.1.2
+	github.com/danbai225/go-logs v0.1.1
 	github.com/go-ego/gse v0.70.0
 	github.com/gogf/gf/v2 v2.0.6
 	github.com/gogf/guuid v1.0.0
