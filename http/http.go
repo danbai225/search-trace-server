@@ -2,13 +2,18 @@ package http
 
 import (
 	"fmt"
+	logs "github.com/danbai225/go-logs"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/os/glog"
+	"io"
 	"os"
 )
 
 func Start() {
 	s := g.Server()
+
+	s.SetLogger(glog.NewWithWriter(io.MultiWriter(os.Stdout, logs.GetGinWriter())))
 	s.SetPort(49492)
 	s.BindMiddleware("/*", MiddlewareCORS)
 	baseDir := "./dist"
