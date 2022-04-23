@@ -5,7 +5,8 @@ MAINTAINER DanBai
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk update
 RUN go env -w GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.cn,direct
-RUN go end -w GOPATH="/go"
+RUN go env -w GOPATH="/go"
+RUN cd / && ls
 #安装所需工具
 RUN apk add gcc g++ make upx git
 #配置时区为中国
