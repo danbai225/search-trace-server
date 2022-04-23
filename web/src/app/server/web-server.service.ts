@@ -57,4 +57,13 @@ export class WebServerService {
         });
     })
   }
+  // 获取黑名单信息
+  getRequesAddblacklist(){
+    return new Promise((resolve,reject)=>{
+      this.http.get(`${this.baseUrl()}/api/v1/blacklist/list`).subscribe(
+        data => {
+        resolve(data);
+        });
+    })
+  }
   }
