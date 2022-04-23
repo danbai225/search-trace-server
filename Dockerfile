@@ -5,6 +5,8 @@ MAINTAINER DanBai
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk update
 RUN go env -w GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.cn,direct
+RUN mkdir "/go"
+RUN go end -w GOPATH="/go"
 #安装所需工具
 RUN apk add gcc g++ make upx git
 #配置时区为中国
@@ -51,5 +53,6 @@ RUN mkdir /app
 WORKDIR /app
 COPY --from=build-env /build/search_trace /app/search_trace
 COPY --from=build-env /build/web/dist/web /app/dist
+COPY --from=build-env /go/pkg/mod/github.com/yanyiwu/ /go/pkg/mod/github.com/yanyiwu/
 RUN chmod +x /app/search_trace
 CMD ["/app/search_trace"]
