@@ -48,4 +48,13 @@ export class WebServerService {
         });
     })
   }
+  // 获取用户信息
+  getRequesInfo(){
+    return new Promise((resolve,reject)=>{
+      this.http.get(`${this.baseUrl()}/api/v1/user/info`).subscribe(
+        data => {
+        resolve(data);
+        });
+    })
+  }
   }

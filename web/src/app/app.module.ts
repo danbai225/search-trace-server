@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouteRoutingModule } from './routes/routes-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from "../app/shared/shared-module";
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 
 
@@ -17,7 +17,8 @@ import { SharedModule } from "../app/shared/shared-module";
     BrowserModule,
     RouteRoutingModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

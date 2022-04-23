@@ -1,7 +1,7 @@
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-	import { Router ,NavigationExtras} from '@angular/router';
-import { catchError, retry } from 'rxjs/operators';
+import { Router} from '@angular/router';
+import { catchError } from 'rxjs/operators';
 @Injectable()
 export class CatchErrorInjector implements HttpInterceptor {
   constructor(public router:Router){}

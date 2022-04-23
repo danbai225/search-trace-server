@@ -1,13 +1,14 @@
 <nz-layout>
   <nz-header>
     <div class="content" nzSearch>
+      <div class="input">
         <nz-input-group  nzSize="large"  [nzSuffix]="suffixIconSearch">
           <input type="search"   [(ngModel)]="searchString"   (ngModelChange)="handleSearchChange($event)"  nz-input placeholder="在寻记上搜索历史内容"  />
         </nz-input-group>
         <ng-template #suffixIconSearch>
           <fa-icon [icon]="faTimes" (click)="handleError() " ></fa-icon>
         </ng-template>
-        <div class="result">
+        <div class="result" *ngIf="isShow">
           <ul nz-list [nzDataSource]="data" nzSize="large">
             <li (click)="handleResule(item)" nz-list-item *ngFor="let item of data" nzNoFlex>
               <ul nz-list-item-actions>
@@ -19,17 +20,40 @@
             </li>
           </ul>
         </div>
+      </div>
+      <div class="select">
+        <a nz-dropdown [nzDropdownMenu]="menu">
+          <fa-icon [icon]="faBars"  ></fa-icon>
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <li nz-menu-item>资源收藏与分享</li>
+            <li nz-menu-item (click)="handleQuit()">退出</li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
     </div>
   </nz-header>
   <nz-divider></nz-divider>
   <nz-content>
-    <p>找到约 {{data?.length? data.length :0}} 条结果</p>
-    <article *ngIf="data" nz-typography>
-      <h6 nz-typography><a href="">ddddddddddddddddddddddddddddddddddddddddddddd我是一个链接</a><fa-icon [icon]="isDownUp?faAngleDown:faAngleUp" (click)="handleadIconDown()"fa-lg ></fa-icon><i (click)="handleTodo()" href="">{{isDownUp?jion:out}}</i></h6>
-      <p nz-typography>
-        list
-      </p>
-    </article>
+    <p>找到约 {{lists?.list.length? lists.list.length :0}} 条结果</p>
+    <div *ngIf="lists?.list">
+      <article  nz-typography  *ngFor="let item of lists.list">
+        <h6 nz-typography><a href="{{item.url}}">{{item.title}}</a><fa-icon [icon]="isDownUp?faAngleDown:faAngleUp" (click)="handleadIconDown()"fa-lg ></fa-icon><i (click)="handleTodo()" href="">{{isDownUp?jion:out}}</i></h6>
+        <p nz-typography
+        nzEllipsis
+        [nzEllipsisRows]="2"
+        >
+          {{item.content}} 时间：{{item.created_at}} username :{{item.username}}
+        </p>
+      </article>
+    </div>
+    <div class="paginantion">
+      <nz-pagination [nzHideOnSinglePage] *ngIf="lists?.list" [nzPageIndex]="PageIndex" [nzTotal]="Total" nzShowSizeChanger [nzPageSize]="PageSize" (nzPageIndexChange)="handlePageindexChange($event)" (nzPageSizeChange)="handlePageSize($event)"></nz-pagination>
+    </div>
    </nz-content>
-  <nz-footer>Made with ❤ by SEARCH-TRACE-SERVER © 2022  Powered by   <a href="https://p00q.cn/">淡白</a>   <a href="https://www.bibooo.top/">Bibooo</a> </nz-footer>
+   <div class="cover">
+    <nz-footer>Made with ❤ by SEARCH-TRACE-SERVER © 2022  Powered by   <a href="https://p00q.cn/">淡白</a>   <a href="https://www.bibooo.top/">Bibooo</a> </nz-footer>
+   </div>
+  
 </nz-layout>
