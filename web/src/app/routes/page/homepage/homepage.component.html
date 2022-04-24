@@ -36,7 +36,7 @@
   </nz-header>
   <nz-divider></nz-divider>
   <nz-content>
-    <p>找到约 {{lists?.list.length? lists.list.length :0}} 条结果</p>
+    <p>找到约 {{datalength}} 条结果</p>
     <div *ngIf="lists?.list">
       <article  nz-typography  *ngFor="let item of lists.list">
         <h6 nz-typography><a href="{{item.url}}">{{item.title}}</a><fa-icon [icon]="isDownUp?faAngleDown:faAngleUp" (click)="handleadIconDown()"fa-lg ></fa-icon><i (click)="handleTodo()" >{{isDownUp?item.username:item.created_at}}</i></h6>
@@ -66,7 +66,7 @@
    >
      <ng-container *nzModalContent>
       <h4>黑名单管理</h4>
-      <nz-table nzTemplateMode nzBordered [nzLoadingDelay]=1000 nzSize="middle">
+      <nz-table nzTemplateMode nzBordered  [nzScroll] = "{ x: '300px', y: '300px' }" [nzLoadingDelay]=1000 nzSize="middle">
         <thead>
           <tr>
             <th>是否启用</th>

@@ -5,7 +5,7 @@ import { faWheelchair,faSearch,faTimes,faAngleDown,faAngleUp,faBars} from '@fort
 import { NumberInput } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { WebServerService } from "../../../server/web-server.service";
-
+import { finalize } from 'rxjs/operators'
 
 @Component({
   selector: 'app-homepage',
@@ -15,6 +15,7 @@ import { WebServerService } from "../../../server/web-server.service";
 export class HomepageComponent implements OnInit {
   // 搜索关键字 data
   data!: Array<string>;
+  datalength:number = 0;
   // 关键字搜索 lists
   lists:any;
   faWheelchair = faWheelchair;
@@ -87,6 +88,7 @@ export class HomepageComponent implements OnInit {
     result = await this.server.getRequestKeyword(word);
     if( result.msg === 'ok'){
        this.lists = result.data;
+       this.datalength = this.lists.list.length;
        this.isShow = false;
       //  分页数据
       this.PageIndex = this.lists.page_num.toString();
@@ -108,6 +110,7 @@ export class HomepageComponent implements OnInit {
    result = await this.server.getRequestpoo($event)
    if(result.msg === 'ok'){
     this.data = result.data;
+    this.datalength = this.data.length
    }else{
      console.log(result.code);
    }
@@ -162,7 +165,7 @@ handletableSize(pageSize:number){
  async showModalTop(){
     this.isVisibleTop = true;
     let result:any;
-    result = await  this.server.getRequesAddblacklist();
+    result = await  this.server.getRequesAddblacklist()
     if(result.msg === 'ok'){
       this.blacklists = result.data;
       console.log(this.blacklists);

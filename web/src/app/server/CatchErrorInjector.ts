@@ -9,10 +9,12 @@ export class CatchErrorInjector implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError(err => {
         // token 判空处理
-        // 页面响应 loadin 加载
         // 登录持久化
         // 页面骨架
         // 路由跳转
+        if(err.ok === false){
+          this.router.navigate(['login']);
+        }
         if(err.error=== 'Unauthorized'){
           console.log('token过期')
           this.router.navigate(['login'])
