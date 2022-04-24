@@ -22,6 +22,7 @@ func Start() {
 	s.SetLogger(glog.NewWithWriter(io.MultiWriter(arr...)))
 	s.SetPort(49492)
 	s.BindMiddleware("/*", MiddlewareCORS)
+	//前端路由
 	baseDir := "./dist"
 	index := fmt.Sprint(baseDir, "/index.html")
 	s.BindHandler("/", func(r *ghttp.Request) {
@@ -36,25 +37,34 @@ func Start() {
 		}
 		r.Response.ServeFile(path)
 	})
-	s.BindHandler("/trace/add", cTraceAdd())
+	//api路由
 	api := s.Group("/api")
 	api.POST("/get_token", cGetToken())
 	v1 := api.Group("/v1")
 	v1.Middleware(checkV1)
 
+	//用户
 	userGroup := v1.Group("/user")
 	userGroup.GET("/info", cUserInfo())
+	userGroup.POST("/add", cUserAdd())
+	userGroup.GET("/list", cUserList())
+	userGroup.POST("/del", cUserDel())
 
+	//记录
 	traceGroup := v1.Group("/trace")
 	traceGroup.POST("/add", cTraceAdd())
 	traceGroup.GET("/search_keyword", cTraceSearchKeyword())
 
+	//词
 	wordGroup := v1.Group("/word")
 	wordGroup.GET("/associate", cWordAssociate())
 
+	//黑名单
 	blacklistGroup := v1.Group("/blacklist")
 	blacklistGroup.GET("/list", cBlacklistList())
 	blacklistGroup.POST("/add", cBlacklistAdd())
+	blacklistGroup.POST("/del", cBlacklistDel())
+
 	s.Run()
 }
 func MiddlewareCORS(r *ghttp.Request) {

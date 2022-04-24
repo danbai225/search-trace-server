@@ -52,6 +52,10 @@ func UserGetUserFromCache(name string) (user *model.User, err error) {
 	user = value.Data().(*model.User)
 	return
 }
+func UserDelUserToCache(name string) {
+	key := fmt.Sprint(userCachePrefix, name)
+	_, _ = db.GetCache().Delete(key)
+}
 
 // LoginByPass 通过用户名密码登陆
 func LoginByPass(name, pass string) (token string, user *model.User, err error) {
@@ -82,7 +86,7 @@ func UserGetOneByName(name string) (user *model.User, err error) {
 }
 
 // UserCreate 创建用户
-func UserCreate(user *model.User) (err error) {
+func UserCreate(user *model.User) (res *model.User, err error) {
 	tx := db.GetDBW()
 	defer func() {
 		if err != nil {
@@ -94,5 +98,38 @@ func UserCreate(user *model.User) (err error) {
 
 	user.Pass = passwordEncryption(user.Pass)
 	err = tx.Create(user).Error
+	if err == nil {
+		res = user
+		res.Pass = ""
+	}
 	return
+}
+
+// UserList 用户列表
+func UserList() (res []*model.User, err error) {
+	tx := db.GetDBR()
+	res = make([]*model.User, 0)
+	err = tx.Model(&model.User{}).Find(&res).Error
+	for _, u := range res {
+		u.Pass = ""
+	}
+	return
+}
+
+func UserDelete(id int64) (res *model.User, err error) {
+	tx := db.GetDBW()
+	defer func() {
+		if err == nil {
+			tx.Commit()
+		} else {
+			tx.Callback()
+		}
+	}()
+	user := model.User{}
+	err = tx.Model(&user).Where("id=?", id).First(&user).Error
+	if err == nil {
+		tx.Delete(&user)
+		UserDelUserToCache(user.Name)
+	}
+	return &user, err
 }

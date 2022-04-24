@@ -28,3 +28,19 @@ func BlacklistAdd(blacklist *model.Blacklist) (res *model.Blacklist, err error) 
 	err = tx.Updates(blacklist).Error
 	return blacklist, err
 }
+func BlacklistDelete(id int64) (res *model.Blacklist, err error) {
+	tx := db.GetDBW()
+	defer func() {
+		if err == nil {
+			tx.Commit()
+		} else {
+			tx.Callback()
+		}
+	}()
+	blacklist := model.Blacklist{}
+	err = tx.Model(&blacklist).Where("id=?", id).First(&blacklist).Error
+	if err == nil {
+		tx.Delete(&blacklist)
+	}
+	return &blacklist, err
+}

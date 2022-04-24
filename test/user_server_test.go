@@ -16,7 +16,7 @@ func TestPass(t *testing.T) {
 	println(passwordEncryption("123456"))
 }
 func TestInitAdmin(t *testing.T) {
-	err := server.UserCreate(&model.User{
+	err, _ := server.UserCreate(&model.User{
 		Name:  "admin",
 		Email: "admin@gmail.com",
 		Pass:  "123456",
