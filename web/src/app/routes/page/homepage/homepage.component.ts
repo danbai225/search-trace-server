@@ -5,6 +5,8 @@ import { faWheelchair,faSearch,faTimes,faAngleDown,faAngleUp,faBars} from '@fort
 import { NumberInput } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { WebServerService } from "../../../server/web-server.service";
+
+
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
@@ -44,16 +46,14 @@ export class HomepageComponent implements OnInit {
   end:number = 5;
   // 关键词
   word:string = '';
-  // 黑名单表格 tr的名
-  blackName :string[] = [];
   // 黑名单list
   blackList: any;
   blacklists:any;
   isVisibleTop:boolean = false;
   isVisibleMiddle: boolean = false;
+
   // table select
-  dataMode:string= '1';
-  inputValue:string ='';
+
   constructor(private formBuilder: FormBuilder,public msg: NzMessageService,private server:WebServerService,private router:Router) {
     this.form = this.formBuilder.group({
       comment: [null, [Validators.maxLength(100)]]
@@ -123,8 +123,8 @@ export class HomepageComponent implements OnInit {
   }
   //切换黑名单数据接送
   handleTodo(){
-
   }
+
   // 页面改变的回调
  async handlePageindexChange(page:number){
     let result:any;
@@ -165,30 +165,55 @@ handletableSize(pageSize:number){
     result = await  this.server.getRequesAddblacklist();
     if(result.msg === 'ok'){
       this.blacklists = result.data;
+      console.log(this.blacklists);
+      this.Totals = this.blacklists.length;
       this.changeblick(this.start,this.end);
-      console.log(this.blackName)
-      
     }else{
       console.log('表格数据请求错误')
     }
-   
+
   }
   // 黑名单list 初始化 + 分页
   changeblick(start:number,end:number){
     this.blackList = this.blacklists.slice(start,end);
-    console.log(this.blackList)
-    this.blackName = Object.keys(this.blacklists[0]).slice(2,6);
   }
   showModalMiddle(): void {
     this.isVisibleMiddle = true;
   }
+  // checkbox事件
+  handleCheckChange($event:any,data: any){
 
-  handleOkTop(): void {
-    console.log('点击了确定');
-    this.isVisibleTop = false;
+  }
+  // 下拉框change mode 事件
+  handleSelectChange($event:any,data: any){
+  //  data.mode = $event;
+  //  this.black.id = $event;
+  //  this.black.mode = $event;
+
+  }
+  // 下拉框change match_pattern 事件
+  handlePatternChange($event:any,data:any){
+  //  data.match_pattern = $event;
+  //  this.black.match_pattern = $event;
+  }
+  // 文本域change 事件
+  handleChangemodel($event:any,data:any){
+  // data.rules = $event;
+  // this.black.rules = $event;
+  }
+ async handleOkTop() {
+    let result:any;
+
+
+      // result = await this.server.getRuequesblocklist(this.black.id,this.black.enable,this.black.id.mode,this.black.id.match_pattern,this.black.id.rules);
+      // console.log(result);
+
   }
 
   handleCancelTop(): void {
     this.isVisibleTop = false;
+  }
+  onCurrentPageDataChange($event:any){
+    console.log($event);
   }
 }

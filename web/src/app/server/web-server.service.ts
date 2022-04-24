@@ -4,6 +4,7 @@ import { environment } from "../../environments/environment";
 
 
 
+
 @Injectable()
 export class WebServerService {
   stieID: any;
@@ -61,6 +62,21 @@ export class WebServerService {
   getRequesAddblacklist(){
     return new Promise((resolve,reject)=>{
       this.http.get(`${this.baseUrl()}/api/v1/blacklist/list`).subscribe(
+        data => {
+        resolve(data);
+        });
+    })
+  }
+  // 新增，修改黑名单
+  getRuequesblocklist(oneId:BigInteger,oneEnable:boolean,oneMode:BigInteger,oneMatch_pattern:BigInteger,Rules:string){
+    return new Promise((resolve,reject)=>{
+      this.http.post(`${this.baseUrl()}/api/v1/blacklist/add`,{
+        id:oneId,
+        enable:oneEnable,
+        mode:oneMode,
+        match_pattern:oneMatch_pattern,
+        rules:Rules
+      }).subscribe(
         data => {
         resolve(data);
         });
