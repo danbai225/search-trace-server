@@ -30,7 +30,7 @@ func BlacklistAdd(blacklist *model.Blacklist) (res *model.Blacklist, err error) 
 	err = tx.Save(blacklist).Error
 	return blacklist, err
 }
-func BlacklistDelete(id int64) (res *model.Blacklist, err error) {
+func BlacklistDelete(u *model.User, id int64) (res *model.Blacklist, err error) {
 	tx := db.GetDBW()
 	defer func() {
 		if err == nil {
@@ -40,7 +40,11 @@ func BlacklistDelete(id int64) (res *model.Blacklist, err error) {
 		}
 	}()
 	blacklist := model.Blacklist{}
-	err = tx.Model(&blacklist).Where("id=?", id).First(&blacklist).Error
+	if u.Role == 1 {
+		err = tx.Model(&blacklist).Where("id=?", id).First(&blacklist).Error
+	} else {
+		err = tx.Model(&blacklist).Where("id=? and username=?", id, u.Name).First(&blacklist).Error
+	}
 	if err == nil {
 		tx.Delete(&blacklist)
 	}

@@ -65,6 +65,7 @@ type cBlacklistDelReq struct {
 func cBlacklistDel() func(c *ghttp.Request) {
 	return func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
+			u := c.GetUser()
 			req := &cBlacklistDelReq{}
 			if err := c.Parse(req); err != nil {
 				_ = c.Response.WriteJsonExit(Msg{
@@ -73,7 +74,7 @@ func cBlacklistDel() func(c *ghttp.Request) {
 				})
 				return
 			}
-			res, err := server.BlacklistDelete(req.Id)
+			res, err := server.BlacklistDelete(u, req.Id)
 			if err == nil {
 				_ = c.Response.WriteJson(Msg{}.ok(res))
 			} else {
