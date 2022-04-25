@@ -97,7 +97,12 @@ func UserCreate(user *model.User) (res *model.User, err error) {
 	}()
 
 	user.Pass = passwordEncryption(user.Pass)
-	err = tx.Create(user).Error
+	if user.ID != 0 {
+		err = tx.Save(user).Error
+	} else {
+		err = tx.Create(user).Error
+	}
+
 	if err == nil {
 		res = user
 		res.Pass = ""

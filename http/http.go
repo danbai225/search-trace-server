@@ -64,6 +64,8 @@ func Start() {
 	blacklistGroup.GET("/list", cBlacklistList())
 	blacklistGroup.POST("/add", cBlacklistAdd())
 	blacklistGroup.POST("/del", cBlacklistDel())
+	blacklistGroup.POST("/add_domain", cBlacklistAddDomain())
+	blacklistGroup.POST("/del_domain", cBlacklistDelDomain())
 
 	s.Run()
 }
