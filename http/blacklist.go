@@ -90,6 +90,7 @@ type cBlacklistAddDomainReq struct {
 func cBlacklistAddDomain() func(c *ghttp.Request) {
 	return func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
+			u := c.GetUser()
 			req := &cBlacklistAddDomainReq{}
 			if err := c.Parse(req); err != nil {
 				_ = c.Response.WriteJsonExit(Msg{
@@ -98,7 +99,7 @@ func cBlacklistAddDomain() func(c *ghttp.Request) {
 				})
 				return
 			}
-			err := server.BlacklistAddDomain(req.Domain)
+			err := server.BlacklistAddDomain(req.Domain, u.Name)
 			if err == nil {
 				_ = c.Response.WriteJson(Msg{}.ok(nil))
 			} else {
@@ -115,6 +116,7 @@ type cBlacklistDelDomainReq struct {
 func cBlacklistDelDomain() func(c *ghttp.Request) {
 	return func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
+			u := c.GetUser()
 			req := &cBlacklistDelDomainReq{}
 			if err := c.Parse(req); err != nil {
 				_ = c.Response.WriteJsonExit(Msg{
@@ -123,7 +125,7 @@ func cBlacklistDelDomain() func(c *ghttp.Request) {
 				})
 				return
 			}
-			err := server.BlacklistDelDomain(req.Domain)
+			err := server.BlacklistDelDomain(req.Domain, u.Name)
 			if err == nil {
 				_ = c.Response.WriteJson(Msg{}.ok(nil))
 			} else {

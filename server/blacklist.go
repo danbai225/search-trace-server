@@ -46,7 +46,7 @@ func BlacklistDelete(id int64) (res *model.Blacklist, err error) {
 	}
 	return &blacklist, err
 }
-func BlacklistAddDomain(domain string) (err error) {
+func BlacklistAddDomain(domain, uname string) (err error) {
 	tx := db.GetDBW()
 	defer func() {
 		if err == nil {
@@ -60,6 +60,7 @@ func BlacklistAddDomain(domain string) (err error) {
 	err = tx.Model(&blacklist).Where("name=?", "domain").First(&blacklist).Error
 	blacklist.Name = "domain"
 	blacklist.Mode = 1
+	blacklist.UserName = uname
 	blacklist.MatchPattern = 1
 	b := true
 	blacklist.Enable = &b
@@ -81,7 +82,7 @@ func BlacklistAddDomain(domain string) (err error) {
 	}
 	return err
 }
-func BlacklistDelDomain(domain string) (err error) {
+func BlacklistDelDomain(domain, uname string) (err error) {
 	tx := db.GetDBW()
 	defer func() {
 		if err == nil {
@@ -95,6 +96,7 @@ func BlacklistDelDomain(domain string) (err error) {
 	err = tx.Model(&blacklist).Where("name=?", "domain").First(&blacklist).Error
 	blacklist.Name = "domain"
 	blacklist.Mode = 1
+	blacklist.UserName = uname
 	blacklist.MatchPattern = 1
 	b := true
 	blacklist.Enable = &b
