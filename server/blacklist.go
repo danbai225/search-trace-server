@@ -90,7 +90,7 @@ func BlacklistDelDomain(domain string) (err error) {
 			tx.Callback()
 		}
 	}()
-	domain = fmt.Sprint("*://", domain, "/*")
+	domain = fmt.Sprint("*://", domain, "*")
 	blacklist := model.Blacklist{}
 	err = tx.Model(&blacklist).Where("name=?", "domain").First(&blacklist).Error
 	blacklist.Name = "domain"
