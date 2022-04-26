@@ -65,6 +65,7 @@ type cBlacklistDelReq struct {
 func cBlacklistDel() func(c *ghttp.Request) {
 	return func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
+			u := c.GetUser()
 			req := &cBlacklistDelReq{}
 			if err := c.Parse(req); err != nil {
 				_ = c.Response.WriteJsonExit(Msg{
@@ -73,9 +74,61 @@ func cBlacklistDel() func(c *ghttp.Request) {
 				})
 				return
 			}
-			res, err := server.BlacklistDelete(req.Id)
+			res, err := server.BlacklistDelete(u, req.Id)
 			if err == nil {
 				_ = c.Response.WriteJson(Msg{}.ok(res))
+			} else {
+				_ = c.Response.WriteJson(Msg{}.err("删除失败"))
+			}
+		}(&ctx.Ctx{Request: c})
+	}
+}
+
+type cBlacklistAddDomainReq struct {
+	Domain string `json:"domain" v:"required"`
+}
+
+func cBlacklistAddDomain() func(c *ghttp.Request) {
+	return func(c *ghttp.Request) {
+		func(c *ctx.Ctx) {
+			u := c.GetUser()
+			req := &cBlacklistAddDomainReq{}
+			if err := c.Parse(req); err != nil {
+				_ = c.Response.WriteJsonExit(Msg{
+					Code: errCode,
+					Msg:  err.Error(),
+				})
+				return
+			}
+			err := server.BlacklistAddDomain(req.Domain, u.Name)
+			if err == nil {
+				_ = c.Response.WriteJson(Msg{}.ok(nil))
+			} else {
+				_ = c.Response.WriteJson(Msg{}.err("增加失败"))
+			}
+		}(&ctx.Ctx{Request: c})
+	}
+}
+
+type cBlacklistDelDomainReq struct {
+	Domain string `json:"domain" v:"required"`
+}
+
+func cBlacklistDelDomain() func(c *ghttp.Request) {
+	return func(c *ghttp.Request) {
+		func(c *ctx.Ctx) {
+			u := c.GetUser()
+			req := &cBlacklistDelDomainReq{}
+			if err := c.Parse(req); err != nil {
+				_ = c.Response.WriteJsonExit(Msg{
+					Code: errCode,
+					Msg:  err.Error(),
+				})
+				return
+			}
+			err := server.BlacklistDelDomain(req.Domain, u.Name)
+			if err == nil {
+				_ = c.Response.WriteJson(Msg{}.ok(nil))
 			} else {
 				_ = c.Response.WriteJson(Msg{}.err("删除失败"))
 			}

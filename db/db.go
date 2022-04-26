@@ -24,7 +24,16 @@ func InitDB() error {
 	return err
 }
 func autoMigrate() {
-	_ = db.AutoMigrate(&model.User{}, &model.Blacklist{}, &model.Word{})
+	tx := GetDBW()
+	var err error
+	defer func() {
+		if err == nil {
+			tx.Commit()
+		} else {
+			tx.Callback()
+		}
+	}()
+	err = tx.AutoMigrate(&model.User{}, &model.Blacklist{}, &model.Word{})
 }
 func GetDBW() *gorm.DB {
 	if config.C.Db.Debug {
