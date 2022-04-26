@@ -7,6 +7,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { WebServerService } from "../../../server/web-server.service";
 import { finalize } from 'rxjs/operators'
 
+
+
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
@@ -51,16 +53,52 @@ export class HomepageComponent implements OnInit {
   blackList: any;
   blacklists:any;
   isVisibleTop:boolean = false;
+  isVisible1:boolean = false;
   isVisibleMiddle: boolean = false;
 
-  // table select
+  // 控制编辑
+  isEdit:boolean = false;
 
+  startEdit(id: string): void {
+    console.log(1)
+    this.isEdit = true;
+  }
+
+ async cancelEdit(id: string){
+    let result : any;
+     result = await this.server.getRuequestdellist(id);
+     if(result.msg ==='ok'){
+       console.log('删除成功')
+       this.isEdit = false;
+       this.isVisibleTop = false;
+     }
+  }
+
+  saveEdit(id: string): void {
+    console.log(id)
+    this.isEdit = true;
+  }
+
+  updateEditCache(): void {
+
+  }
   constructor(private formBuilder: FormBuilder,public msg: NzMessageService,private server:WebServerService,private router:Router) {
     this.form = this.formBuilder.group({
       comment: [null, [Validators.maxLength(100)]]
     });
   }
  async ngOnInit(): Promise<void> {
+   const data = [];
+   for (let i = 0; i < 100; i++) {
+     data.push({
+       id: `${i}`,
+       name: `Edrward ${i}`,
+       age: 32,
+       address: `London Park no. ${i}`
+     });
+   }
+
+   this.updateEditCache();
       // 判断 token
       let result:any;
       result = await this.server.getRequesInfo();
@@ -215,8 +253,24 @@ handletableSize(pageSize:number){
 
   handleCancelTop(): void {
     this.isVisibleTop = false;
+    this.isEdit = false;
+  }
+  //用户管理
+  showUserAdmin(){
+    this.isVisible1 = true;
+  }
+  handleCancel(){
+    this.isVisible1 = false;
+  }
+  handleOk(){
+    this.isVisible1 = false;
+  }
+    //添加
+  addRow(){
+
   }
   onCurrentPageDataChange($event:any){
     console.log($event);
   }
+
 }

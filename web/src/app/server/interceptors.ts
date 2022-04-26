@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 export class Interceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>,next: HttpHandler): Observable<HttpEvent<any>> {
        const token :string | null = window.localStorage.getItem('_token');
-       console.log(req)
         if (token) {
             // 设置请求头
             req = req.clone({

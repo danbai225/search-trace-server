@@ -82,4 +82,16 @@ export class WebServerService {
         });
     })
   }
+  //删除黑名单
+  getRuequestdellist(oneId:string){
+    return new Promise((resolve,reject)=>{
+      this.http.post(`${this.baseUrl()}/api/v1/blacklist/del`,{
+        id:oneId,
+      }).subscribe(
+        data => {
+          resolve(data);
+        });
+    })
   }
+
+}

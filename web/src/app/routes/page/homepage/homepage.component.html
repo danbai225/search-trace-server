@@ -28,6 +28,7 @@
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu nzSelectable>
             <li nz-menu-item (click)="showModalTop()" >黑名单管理</li>
+            <li nz-menu-item (click)="showUserAdmin()" >用户管理</li>
             <li nz-menu-item (click)="handleQuit()">退出</li>
           </ul>
         </nz-dropdown-menu>
@@ -47,62 +48,84 @@
           {{item.content}} 时间：{{item.created_at}} username :{{item.username}}
         </p>
       </article>
-    </div>
-    <div class="paginantion">
-      <nz-pagination [nzHideOnSinglePage] *ngIf="lists?.list" [nzPageIndex]="PageIndex" [nzTotal]="Total" nzShowSizeChanger [nzPageSize]="PageSize" (nzPageIndexChange)="handlePageindexChange($event)" (nzPageSizeChange)="handlePageSize($event)"></nz-pagination>
+      <div class="paginantion">
+        <nz-pagination [nzHideOnSinglePage] *ngIf="lists?.list" [nzPageIndex]="PageIndex" [nzTotal]="Total" nzShowSizeChanger [nzPageSize]="PageSize" (nzPageIndexChange)="handlePageindexChange($event)" (nzPageSizeChange)="handlePageSize($event)"></nz-pagination>
+      </div>
     </div>
    </nz-content>
+<!--   黑名单-->
    <nz-modal
      [nzStyle]="{ top: '30px' }"
      [(nzVisible)]="isVisibleTop"
      (nzOnCancel)="handleCancelTop()"
      (nzOnOk)="handleOkTop()"
      nzKeyboard="false"
-     #rowSelectionTable
-     nzWidth='60%'
+     nzWidth="100%"
      nzMaskClosable="false"
      nzCloseOnNavigation="false"
-     (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+
    >
      <ng-container *nzModalContent>
       <h4>黑名单管理</h4>
-      <nz-table nzTemplateMode nzBordered  [nzScroll] = "{ x: '300px', y: '300px' }" [nzLoadingDelay]=1000 nzSize="middle">
-        <thead>
-          <tr>
-            <th>是否启用</th>
-            <th>模式 不记录 2记录</th>
-            <th>模式 域名通配符 2正则</th>
-            <th>匹配规则一行一个</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let data of blackList">
-            <!-- <td>{{ data?.id }}</td>
-            <td>{{ data?.username }}</td> -->
-            <!-- {{ data?.enable }}   -->
-            <td><label nz-checkbox [(ngModel)]="data.enable" (ngModelChange)="handleCheckChange($event,data)"></label> </td>
-            <!-- {{ data?.mode }} -->
-            <td><nz-select [ngModel]="data.mode" (ngModelChange)="handleSelectChange($event,data)" [nzDropdownStyle]="{background:'#ffffff'}">
-              <nz-option [nzValue]="1" nzLabel="不记录"></nz-option>
-              <nz-option [nzValue]="2" nzLabel="记录"></nz-option>
-            </nz-select> </td>
-            <!-- {{ data?.match_pattern }} -->
-            <td>
-              <nz-select [ngModel]="data.match_pattern" (ngModelChange)="handlePatternChange($event,data)"  [nzDropdownStyle]="{background:'#ffffff'}">
-                <nz-option [nzValue]="1" nzLabel="域名通配符"></nz-option>
-                <nz-option [nzValue]="2" nzLabel="正则"></nz-option>
+       <button nz-button (click)="addRow()" nzType="primary">Add</button>
+       <nz-table #basicTable nzBreakWord="true"  nzTableLayout="fixed" nzBordered   nzEllipsis  [nzFrontPagination]="false" [nzData]="blackList">
+         <thead style="display: flex;align-items: center;justify-content: space-around;flex-wrap: wrap">
+         <tr>
+           <th nzWidth="25%" >用户名字</th>
+           <th nzWidth="25%" >是否启用</th>
+           <th nzWidth="25%" >是否记录</th>
+           <th nzWidth="25%" >条件类型</th>
+           <th nzWidth="25%" >匹配规则</th>
+           <th nzWidth="25%" >编辑菜单</th>
+         </tr>
+         </thead>
+         <tbody>
+         <tr *ngFor="let data of basicTable.data">
+           <ng-container *ngIf="!isEdit; else editTemplate">
+             <td>{{ data?.username }}</td>
+             <td [nzChecked]="checked" [nzIndeterminate]="data.enable" (nzCheckedChange)="handleSelectChange($event,data)"></td>
+             <td>
+               <nz-select nzDisabled [ngModel]="data?.mode" (ngModelChange)="handleSelectChange($event,data)" [nzDropdownStyle]="{background:'#ffffff'}">
+                 <nz-option  [nzValue]="1" nzLabel="不记录"></nz-option>
+                 <nz-option [nzValue]="2" nzLabel="记录"></nz-option>
+               </nz-select>
+             </td>
+             <td>
+              <nz-select nzDisabled [ngModel]="data.match_pattern" (ngModelChange)="handlePatternChange($event,data)"  [nzDropdownStyle]="{background:'#ffffff'}">-->
+              <nz-option [nzValue]="1" nzLabel="域名通配符"></nz-option>-->
+              <nz-option [nzValue]="2" nzLabel="正则"></nz-option>-->
               </nz-select>
-            </td>
-            <!-- {{ data?.rules }} -->
-            <td>
-              <textarea rows="1" nz-input (ngModelChange)="handleChangemodel($event,data)"  [ngModel]=data?.rules  placeholder="'匹配规则一行一个'" ></textarea>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-      <nz-card>
+               </td>
+             <td><textarea  disabled rows="1" nz-input  [ngModel]=data?.rules ></textarea></td>
+             <td><a (click)="startEdit(data.id)">Edit</a></td>
+           </ng-container>
+           <ng-template #editTemplate>
+             <td>{{ data?.username }}</td>
+             <td><label nz-checkbox [(ngModel)]="data.enable" (ngModelChange)="handleCheckChange($event,data)"></label></td>
+             <td>
+               <nz-select [ngModel]="data?.mode" (ngModelChange)="handleSelectChange($event,data)" [nzDropdownStyle]="{background:'#ffffff'}">
+                 <nz-option [nzValue]="1" nzLabel="不记录"></nz-option>
+                 <nz-option [nzValue]="2" nzLabel="记录"></nz-option>
+               </nz-select>
+             </td>
+             <td>
+               <nz-select [ngModel]="data.match_pattern" (ngModelChange)="handlePatternChange($event,data)"  [nzDropdownStyle]="{background:'#ffffff'}">-->
+                 <nz-option [nzValue]="1" nzLabel="域名通配符"></nz-option>-->
+                 <nz-option [nzValue]="2" nzLabel="正则"></nz-option>-->
+               </nz-select>
+             </td>
+               <td> <textarea rows="1" nz-input (ngModelChange)="handleChangemodel($event,data)"  [ngModel]='data?.rules'  placeholder="'匹配规则一行一个'" ></textarea></td>
+             <td style="display: flex;justify-content: space-around">
+               <a (click)="saveEdit(data.id)" class="save">修改</a>
+               <a nz-popconfirm nzPopconfirmTitle="是否删除？" (nzOnConfirm)="cancelEdit(data.id)">删除</a>
+             </td>
+           </ng-template>
+         </tr>
+         </tbody>
+       </nz-table>
 
-            <!-- <nz-pagination
+      <nz-card>
+           <nz-pagination
             [nzHideOnSinglePage]
             [nzPageIndex]="tablePageIndex"
             [nzTotal]="Totals"
@@ -112,11 +135,18 @@
             (nzPageIndexChange)="handletableindexChange($event)"
             (nzPageSizeChange)="handletableSize($event)"
             >
-          </nz-pagination> -->
-
+          </nz-pagination>
         </nz-card>
      </ng-container>
    </nz-modal>
+<!--  用户 -->
+  <nz-modal [(nzVisible)]="isVisible1" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+      <p>Content one</p>
+      <p>Content two</p>
+      <p>Content three</p>
+    </ng-container>
+  </nz-modal>
    <div class="cover">
     <nz-footer>Made with ❤ by SEARCH-TRACE-SERVER © 2022  Powered by   <a href="https://p00q.cn/">淡白</a>   <a href="https://www.bibooo.top/">Bibooo</a> </nz-footer>
    </div>
