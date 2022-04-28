@@ -9,8 +9,6 @@ import { environment } from "../../environments/environment";
 export class WebServerService {
   stieID: any;
   constructor (private http:HttpClient){}
-
-
   //  测试地址
    baseUrl(){
     return environment.apiUrl
@@ -67,8 +65,23 @@ export class WebServerService {
         });
     })
   }
-  // 新增，修改黑名单
-  getRuequesblocklist(oneId:BigInteger,oneEnable:boolean,oneMode:BigInteger,oneMatch_pattern:BigInteger,Rules:string){
+  //添加黑名单
+  getRuequesaddblocklist(oneEnable:boolean,oneMode:number,oneMatch_pattern:number,Rules:string,Onename:string){
+    return new Promise((resolve,reject)=>{
+      this.http.post(`${this.baseUrl()}/api/v1/blacklist/add`,{
+        enable:oneEnable,
+        mode:oneMode,
+        match_pattern:oneMatch_pattern,
+        rules:Rules,
+        name:Onename
+      }).subscribe(
+        data => {
+          resolve(data);
+        });
+    })
+  }
+  //修改黑名单
+  getRuequesblocklist(oneId:number,oneEnable:boolean,oneMode:BigInteger,oneMatch_pattern:BigInteger,Rules:string){
     return new Promise((resolve,reject)=>{
       this.http.post(`${this.baseUrl()}/api/v1/blacklist/add`,{
         id:oneId,
@@ -93,5 +106,38 @@ export class WebServerService {
         });
     })
   }
-
+//  获取用户信息
+  getRuequestuser(){
+    return new Promise((resolve,reject)=>{
+      this.http.get(`${this.baseUrl()}/api/v1/user/list`).subscribe(
+        data => {
+          resolve(data);
+        });
+    })
+  }
+// 添加编辑用户信息
+  getRuequestedituser(Onename:string,Oneemail:string,Onepass:string){
+    console.log(Onename,Oneemail,Onepass)
+    return new Promise((resolve,reject)=>{
+      this.http.post(`${this.baseUrl()}/api/v1/user/add`,{
+        name:Onename,
+        email:Oneemail,
+        pass:Onepass
+      }).subscribe(
+        data => {
+          resolve(data);
+        });
+    })
+  }
+  //删除用户信息
+  getRuequestedeluser(id:number,){
+    return new Promise((resolve,reject)=>{
+      this.http.post(`${this.baseUrl()}/api/v1/user/del`,{
+        id:id
+      }).subscribe(
+        data => {
+          resolve(data);
+        });
+    })
+  }
 }

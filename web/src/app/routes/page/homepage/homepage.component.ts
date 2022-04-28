@@ -5,7 +5,8 @@ import { faWheelchair,faSearch,faTimes,faAngleDown,faAngleUp,faBars} from '@fort
 import { NumberInput } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { WebServerService } from "../../../server/web-server.service";
-import { finalize } from 'rxjs/operators'
+import {$e} from "@angular/compiler/src/chars";
+
 
 
 
@@ -55,9 +56,17 @@ export class HomepageComponent implements OnInit {
   isVisibleTop:boolean = false;
   isVisible1:boolean = false;
   isVisibleMiddle: boolean = false;
-
   // 控制编辑
   isEdit:boolean = false;
+  // 用户信息
+  users:any;
+  validateForm!: FormGroup;
+  // 判断添加用户
+  isUser:boolean = false;
+  // 判断添加表
+  visible2:boolean = false;
+  // 规则名字
+  Rulename:string = '';
 
   startEdit(id: string): void {
     console.log(1)
@@ -65,6 +74,7 @@ export class HomepageComponent implements OnInit {
   }
 
  async cancelEdit(id: string){
+    console.log(id);
     let result : any;
      result = await this.server.getRuequestdellist(id);
      if(result.msg ==='ok'){
@@ -73,7 +83,7 @@ export class HomepageComponent implements OnInit {
        this.isVisibleTop = false;
      }
   }
-
+  // 修改
   saveEdit(id: string): void {
     console.log(id)
     this.isEdit = true;
@@ -82,12 +92,21 @@ export class HomepageComponent implements OnInit {
   updateEditCache(): void {
 
   }
-  constructor(private formBuilder: FormBuilder,public msg: NzMessageService,private server:WebServerService,private router:Router) {
+  constructor(private formBuilder: FormBuilder,public msg: NzMessageService,private server:WebServerService,private router:Router,private fb: FormBuilder,private message: NzMessageService) {
     this.form = this.formBuilder.group({
       comment: [null, [Validators.maxLength(100)]]
     });
   }
+  createMessage(type: string): void {
+    this.message.create(type, `This is a message of ${type}`);
+  }
  async ngOnInit(): Promise<void> {
+   this.validateForm = this.fb.group({
+     userName: [null, [Validators.required]],
+     password: [null, [Validators.required]],
+     email:[null,[Validators.required]],
+     remember: [true]
+   });
    const data = [];
    for (let i = 0; i < 100; i++) {
      data.push({
@@ -97,12 +116,12 @@ export class HomepageComponent implements OnInit {
        address: `London Park no. ${i}`
      });
    }
-
    this.updateEditCache();
       // 判断 token
       let result:any;
       result = await this.server.getRequesInfo();
       if(result.msg !== 'ok'){
+         this.createMessage(result.msg);
          this.router.navigate(['login']);
       }
   }
@@ -203,8 +222,9 @@ handletableSize(pageSize:number){
  async showModalTop(){
     this.isVisibleTop = true;
     let result:any;
-    result = await  this.server.getRequesAddblacklist()
+    result = await  this.server.getRequesAddblacklist();
     if(result.msg === 'ok'){
+      console.log(result)
       this.blacklists = result.data;
       console.log(this.blacklists);
       this.Totals = this.blacklists.length;
@@ -256,21 +276,63 @@ handletableSize(pageSize:number){
     this.isEdit = false;
   }
   //用户管理
-  showUserAdmin(){
+ async showUserAdmin(){
     this.isVisible1 = true;
+    //    获取用户信息
+    let resulruse : any;
+    resulruse= await this.server.getRuequestuser();
+
+    if(resulruse.msg == 'ok'){
+      this.users = resulruse.data;
+    }
+    console.log(resulruse)
   }
   handleCancel(){
     this.isVisible1 = false;
   }
   handleOk(){
     this.isVisible1 = false;
+    this.isUser = false;
   }
     //添加
   addRow(){
+      this.visible2 = true;
+  }
+  closeDrawer(){
+    console.log(1);
+    this.visible2 = false;
+  }
+ async useconfirm(id:number){
+    console.log(id)
+       let result : any;
+       result = await this.server.getRuequestedeluser(id);
+       if(result.msg === 'ok'){
+         this.isVisible1 = false;
+         this.isUser = false;
+       }
+  }
+ async handleaddUser(){
+   this.isUser = true;
 
+  }
+ async submitForm() {
+   //添加用户
+   console.log('submit', this.validateForm.value);
+   if(this.validateForm.value.remember){
+     let rults: any;
+     rults = await this.server.getRuequestedituser(this.validateForm.value.userName, this.validateForm.value.email, this.validateForm.value.password);
+     console.log(rults)
+   }
+
+   // this.isUser = false;
+ }
+  handleAddrecord($event:any){
+    console.log($event)
+  }
+  Adddomain($event:any){
+    console.log($event)
   }
   onCurrentPageDataChange($event:any){
     console.log($event);
   }
-
 }

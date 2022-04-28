@@ -27,8 +27,8 @@
         </a>
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu nzSelectable>
-            <li nz-menu-item (click)="showModalTop()" >黑名单管理</li>
-            <li nz-menu-item (click)="showUserAdmin()" >用户管理</li>
+            <li nz-menu-item (click)="showModalTop()">黑名单管理</li>
+            <li nz-menu-item (click)="showUserAdmin()">用户管理</li>
             <li nz-menu-item (click)="handleQuit()">退出</li>
           </ul>
         </nz-dropdown-menu>
@@ -37,6 +37,7 @@
   </nz-header>
   <nz-divider></nz-divider>
   <nz-content>
+    <ng-http-loader></ng-http-loader>
     <p>找到约 {{datalength}} 条结果</p>
     <div *ngIf="lists?.list">
       <article  nz-typography  *ngFor="let item of lists.list">
@@ -55,6 +56,7 @@
    </nz-content>
 <!--   黑名单-->
    <nz-modal
+     [nzBodyStyle]="{padding:'11px'}"
      [nzStyle]="{ top: '30px' }"
      [(nzVisible)]="isVisibleTop"
      (nzOnCancel)="handleCancelTop()"
@@ -66,21 +68,50 @@
 
    >
      <ng-container *nzModalContent>
+
       <h4>黑名单管理</h4>
        <button nz-button (click)="addRow()" nzType="primary">Add</button>
+       <nz-drawer
+         [nzClosable]="false"
+         [nzVisible]="visible2"
+         nzPlacement="top"
+         (nzOnClose)="closeDrawer()"
+         nzHeight="240px"
+       >
+         <ng-container *nzDrawerContent>
+           <nz-card>
+             <label nz-checkbox [(ngModel)]="checked">是否启用</label>
+             <div>
+               <nz-select ngModel=1  (ngModelChange)="handleAddrecord($event)">
+                 <nz-option  [nzValue]="1" nzLabel="不记录"></nz-option>
+                 <nz-option [nzValue]="2" nzLabel="记录"></nz-option>
+               </nz-select>
+               <nz-select ngModel=1 (ngModelChange)="Adddomain($event)" >
+                 <nz-option [nzValue]="1" nzLabel="域名通配符"></nz-option>-->
+                 <nz-option [nzValue]="2" nzLabel="正则"></nz-option>-->
+               </nz-select>
+             </div>
+             <input nz-input placeholder="规则名字" [(ngModel)]="Rulename" />
+             <textarea rows="1" nz-input placeholder="记录规则，一行一个"></textarea>
+             <a nz-button nzType="link">添加</a>
+           </nz-card>
+
+         </ng-container>
+       </nz-drawer>
        <nz-table #basicTable nzBreakWord="true"  nzTableLayout="fixed" nzBordered   nzEllipsis  [nzFrontPagination]="false" [nzData]="blackList">
-         <thead style="display: flex;align-items: center;justify-content: space-around;flex-wrap: wrap">
-         <tr>
+         <thead>
+         <tr class="table-flex">
            <th nzWidth="25%" >用户名字</th>
            <th nzWidth="25%" >是否启用</th>
            <th nzWidth="25%" >是否记录</th>
            <th nzWidth="25%" >条件类型</th>
            <th nzWidth="25%" >匹配规则</th>
+           <th nzWidth="25%" >规则名字</th>
            <th nzWidth="25%" >编辑菜单</th>
          </tr>
          </thead>
          <tbody>
-         <tr *ngFor="let data of basicTable.data">
+         <tr *ngFor="let data of basicTable.data" class="table-tr">
            <ng-container *ngIf="!isEdit; else editTemplate">
              <td>{{ data?.username }}</td>
              <td [nzChecked]="checked" [nzIndeterminate]="data.enable" (nzCheckedChange)="handleSelectChange($event,data)"></td>
@@ -96,7 +127,8 @@
               <nz-option [nzValue]="2" nzLabel="正则"></nz-option>-->
               </nz-select>
                </td>
-             <td><textarea  disabled rows="1" nz-input  [ngModel]=data?.rules ></textarea></td>
+             <td><textarea  [nzAutosize]="true" disabled rows="1" nz-input  [ngModel]=data?.rules ></textarea></td>
+             <td><input nz-input  [(ngModel)]="data.name" [disabled]="true" /></td>
              <td><a (click)="startEdit(data.id)">Edit</a></td>
            </ng-container>
            <ng-template #editTemplate>
@@ -115,6 +147,7 @@
                </nz-select>
              </td>
                <td> <textarea rows="1" nz-input (ngModelChange)="handleChangemodel($event,data)"  [ngModel]='data?.rules'  placeholder="'匹配规则一行一个'" ></textarea></td>
+             <td><input nz-input  [(ngModel)]="data.name"  /></td>
              <td style="display: flex;justify-content: space-around">
                <a (click)="saveEdit(data.id)" class="save">修改</a>
                <a nz-popconfirm nzPopconfirmTitle="是否删除？" (nzOnConfirm)="cancelEdit(data.id)">删除</a>
@@ -140,12 +173,66 @@
      </ng-container>
    </nz-modal>
 <!--  用户 -->
-  <nz-modal [(nzVisible)]="isVisible1" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <nz-modal [(nzVisible)]="isVisible1"  (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" >
     <ng-container *nzModalContent>
-      <p>Content one</p>
-      <p>Content two</p>
-      <p>Content three</p>
+      <nz-card>
+      <a nz-button nzType="link" (click)="handleaddUser()">添加用户</a>
+      <nz-list *ngIf="!isUser;else addlisturl" nzItemLayout="horizontal">
+        <nz-list-item *ngFor="let item of users">
+          <nz-list-item-meta-title>
+            <a>{{ item.name }}</a>
+          </nz-list-item-meta-title>
+          <nz-list-item-meta-title>
+            <a>{{ item.email }}</a>
+          </nz-list-item-meta-title>
+          <nz-list-item-meta-description>
+            {{ item.created_at ||  data }}
+            <p>添加字段 {{item.role}}password {{item.pass}}</p>
+          </nz-list-item-meta-description>
+          <a
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure delete this task?"
+            nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="useconfirm(item.id)"
+          >
+            Delete
+          </a>
+        </nz-list-item>
+
+      </nz-list>
+      </nz-card>
     </ng-container>
+    <ng-template #addlisturl>
+      <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your username!">
+            <nz-input-group nzPrefixIcon="user">
+              <input formControlName="userName" nz-input placeholder="Username" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your Password!">
+            <nz-input-group nzPrefixIcon="lock">
+              <input formControlName="password" nz-input type="password" placeholder="Password" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <nz-input-group >
+              <input formControlName="email" nz-input type="email" placeholder="email" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+              <button nz-button [disabled]="!validateForm.valid" nzType="dashed">提交</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-template>
+
   </nz-modal>
    <div class="cover">
     <nz-footer>Made with ❤ by SEARCH-TRACE-SERVER © 2022  Powered by   <a href="https://p00q.cn/">淡白</a>   <a href="https://www.bibooo.top/">Bibooo</a> </nz-footer>

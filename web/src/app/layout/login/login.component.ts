@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {  Router } from "@angular/router"
 import { faCoffee,faUser } from '@fortawesome/free-solid-svg-icons';
 import { WebServerService } from "../../server/web-server.service";
-
+import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,7 +14,10 @@ export class LoginComponent implements OnInit {
   validateForm!: FormGroup;
   user = faUser;
   users:string = ''
-  constructor(private Server: WebServerService,private fb: FormBuilder, private router:Router) {}
+  constructor(private Server: WebServerService,private fb: FormBuilder, private router:Router,private message: NzMessageService) {}
+  createMessage(type: string): void {
+    this.message.create(type, `err: ${type}`);
+  }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -34,7 +37,7 @@ export class LoginComponent implements OnInit {
          this.router.navigate(['home']);
          localStorage.setItem('_token',result.data);
       }else{
-        console.log('密码错误')
+        this.createMessage(result.msg)
       }
     } else {
       Object.values(this.validateForm.controls).forEach(control => {

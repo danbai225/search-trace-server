@@ -69,28 +69,29 @@
 
 // 手机端
 @media screen and (max-width:960px) {
-  tbody > tr{
-    width: 100%;
-    height: 100%;
-    flex-wrap: wrap;
-  }
-  tbody > tr > .ant-table-cell{
-    display: block;
-    width: 10em;
-    height: 100% ;
-   margin: 0;
-    padding: 0;
-  }
-  :host ::ng-deep{
-    thead>.ant-table-row{
-      display: flex !important;
-      flex-direction: column;
-      align-items: center;
 
+  :host ::ng-deep .ant-modal-body{
+    padding: 11px;
+  }
+  :host ::ng-deep .ant-table-thead{
+    display: block;
+  }
+  .table-flex{
+    display: flex;
+
+  }
+  .table-tr{
+    display: flex;
+    flex-direction: column;
+    td{
+      padding: 0;
+      margin: 0;
+      display: block;
+      font-size: 2em;
+      width: 12em;
+      line-height: 1.5em;
     }
-    tbody>.ant-table-row{
-      display: flex !important;
-    }
+
   }
 
 
@@ -100,6 +101,7 @@
       width: 100%;
       display: flex;
       justify-content: center;
+      align-items: center;
       background-color: #FFFFFF;
       margin-top: 1em;
       height: 100%;
@@ -164,7 +166,5 @@
         }
       }
     }
-
   }
-
 }
