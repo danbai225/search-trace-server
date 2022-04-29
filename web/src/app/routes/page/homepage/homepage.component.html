@@ -80,20 +80,20 @@
        >
          <ng-container *nzDrawerContent>
            <nz-card>
-             <label nz-checkbox [(ngModel)]="checked">是否启用</label>
+             <label nz-checkbox [(ngModel)]="checked" (ngModelChange)="handleCheckbox($event)">是否启用</label>
              <div>
-               <nz-select ngModel=1  (ngModelChange)="handleAddrecord($event)">
+               <nz-select [ngModel]=1  (ngModelChange)="handleAddrecord($event)">
                  <nz-option  [nzValue]="1" nzLabel="不记录"></nz-option>
                  <nz-option [nzValue]="2" nzLabel="记录"></nz-option>
                </nz-select>
-               <nz-select ngModel=1 (ngModelChange)="Adddomain($event)" >
-                 <nz-option [nzValue]="1" nzLabel="域名通配符"></nz-option>-->
-                 <nz-option [nzValue]="2" nzLabel="正则"></nz-option>-->
+               <nz-select [ngModel]=1 (ngModelChange)="Adddomain($event)" >
+                 <nz-option [nzValue]="1" nzLabel="域名通配符"></nz-option>
+                 <nz-option [nzValue]="2" nzLabel="正则"></nz-option>
                </nz-select>
              </div>
-             <input nz-input placeholder="规则名字" [(ngModel)]="Rulename" />
-             <textarea rows="1" nz-input placeholder="记录规则，一行一个"></textarea>
-             <a nz-button nzType="link">添加</a>
+             <input nz-input placeholder="规则名字" [(ngModel)]="rename" (ngModelChange)="handleRulename($event)"/>
+             <textarea rows="1" nz-input placeholder="记录规则，一行一个" [(ngModel)]="textarea"  (ngModelChange)="handletextAr($event)"></textarea>
+             <a nz-button nzType="link" (click)="handleAddbtn()">添加</a>
            </nz-card>
 
          </ng-container>
@@ -133,21 +133,21 @@
            </ng-container>
            <ng-template #editTemplate>
              <td>{{ data?.username }}</td>
-             <td><label nz-checkbox [(ngModel)]="data.enable" (ngModelChange)="handleCheckChange($event,data)"></label></td>
+             <td><label nz-checkbox [(ngModel)]="data.enable" (ngModelChange)="handleCheckChange($event)"></label></td>
              <td>
-               <nz-select [ngModel]="data?.mode" (ngModelChange)="handleSelectChange($event,data)" [nzDropdownStyle]="{background:'#ffffff'}">
+               <nz-select [ngModel]="data?.mode" (ngModelChange)="handleSelectChange($event)" [nzDropdownStyle]="{background:'#ffffff'}">
                  <nz-option [nzValue]="1" nzLabel="不记录"></nz-option>
                  <nz-option [nzValue]="2" nzLabel="记录"></nz-option>
                </nz-select>
              </td>
              <td>
-               <nz-select [ngModel]="data.match_pattern" (ngModelChange)="handlePatternChange($event,data)"  [nzDropdownStyle]="{background:'#ffffff'}">-->
+               <nz-select [ngModel]="data.match_pattern" (ngModelChange)="handlePatternChange($event)"  [nzDropdownStyle]="{background:'#ffffff'}">-->
                  <nz-option [nzValue]="1" nzLabel="域名通配符"></nz-option>-->
                  <nz-option [nzValue]="2" nzLabel="正则"></nz-option>-->
                </nz-select>
              </td>
-               <td> <textarea rows="1" nz-input (ngModelChange)="handleChangemodel($event,data)"  [ngModel]='data?.rules'  placeholder="'匹配规则一行一个'" ></textarea></td>
-             <td><input nz-input  [(ngModel)]="data.name"  /></td>
+               <td> <textarea rows="1" nz-input (ngModelChange)="handleChangemodel($event)"  [ngModel]='data?.rules'  placeholder="'匹配规则一行一个'" ></textarea></td>
+             <td><input nz-input  [(ngModel)]="data.name" (ngModelChange)="handleRulename($event)" /></td>
              <td style="display: flex;justify-content: space-around">
                <a (click)="saveEdit(data.id)" class="save">修改</a>
                <a nz-popconfirm nzPopconfirmTitle="是否删除？" (nzOnConfirm)="cancelEdit(data.id)">删除</a>
@@ -159,7 +159,6 @@
 
       <nz-card>
            <nz-pagination
-            [nzHideOnSinglePage]
             [nzPageIndex]="tablePageIndex"
             [nzTotal]="Totals"
             nzShowSizeChanger

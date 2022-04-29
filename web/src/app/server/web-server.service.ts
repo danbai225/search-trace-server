@@ -81,7 +81,7 @@ export class WebServerService {
     })
   }
   //修改黑名单
-  getRuequesblocklist(oneId:number,oneEnable:boolean,oneMode:BigInteger,oneMatch_pattern:BigInteger,Rules:string){
+  getRuequesblocklist(oneId:number,oneEnable:boolean,oneMode:number,oneMatch_pattern:number,Rules:string){
     return new Promise((resolve,reject)=>{
       this.http.post(`${this.baseUrl()}/api/v1/blacklist/add`,{
         id:oneId,

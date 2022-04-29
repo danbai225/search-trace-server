@@ -5,10 +5,17 @@ import { faWheelchair,faSearch,faTimes,faAngleDown,faAngleUp,faBars} from '@fort
 import { NumberInput } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { WebServerService } from "../../../server/web-server.service";
-import {$e} from "@angular/compiler/src/chars";
 
 
 
+
+ interface blackList {
+  enable: boolean;
+  mode: number;
+  match_pattern: number;
+  rules: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-homepage',
@@ -42,8 +49,8 @@ export class HomepageComponent implements OnInit {
   Total:string = '18';
   PageSize:string = '10';
   //  表格 分页
-  tablePageIndex:string = '1';
-  Totals:NumberInput = '10';
+  tablePageIndex:number = 1;
+  Totals:number = 10;
   tablePageSize:string = '5';
   nzPageSizeOptions:number[] =[5,10]
   start:number = 0;
@@ -66,7 +73,13 @@ export class HomepageComponent implements OnInit {
   // 判断添加表
   visible2:boolean = false;
   // 规则名字
-  Rulename:string = '';
+  rename:string = '';
+  // 文本域
+  textarea:string = '';
+  // 添加黑名单
+  addBlackList : blackList = {
+    enable: true, match_pattern: 1, mode: 1, name: "", rules: ""
+  }
 
   startEdit(id: string): void {
     console.log(1)
@@ -78,15 +91,17 @@ export class HomepageComponent implements OnInit {
     let result : any;
      result = await this.server.getRuequestdellist(id);
      if(result.msg ==='ok'){
-       console.log('删除成功')
+       this.createMessage(result.msg)
        this.isEdit = false;
        this.isVisibleTop = false;
      }
   }
   // 修改
-  saveEdit(id: string): void {
+  async saveEdit(id: string){
     console.log(id)
-    this.isEdit = true;
+    // let resule:any;
+    // resule = await  this.server.getRuequesblocklist()
+    this.isEdit = false;
   }
 
   updateEditCache(): void {
@@ -208,6 +223,7 @@ async  handlePageSize(pageSize:number){
   }
  // table 分页
  handletableindexChange(page:number){
+    console.log(page)
    this.start = ((page-1) * parseInt(this.tablePageSize));
    this.end = page * parseInt(this.tablePageSize);
    this.changeblick(this.start,this.end);
@@ -242,25 +258,32 @@ handletableSize(pageSize:number){
     this.isVisibleMiddle = true;
   }
   // checkbox事件
-  handleCheckChange($event:any,data: any){
+  handleCheckChange($event:boolean){
+    console.log($event)
 
   }
   // 下拉框change mode 事件
-  handleSelectChange($event:any,data: any){
+  handleSelectChange($event:number){
+    console.log($event)
   //  data.mode = $event;
   //  this.black.id = $event;
   //  this.black.mode = $event;
 
   }
   // 下拉框change match_pattern 事件
-  handlePatternChange($event:any,data:any){
+  handlePatternChange($event:number){
+    console.log($event)
   //  data.match_pattern = $event;
   //  this.black.match_pattern = $event;
   }
   // 文本域change 事件
-  handleChangemodel($event:any,data:any){
-  // data.rules = $event;
-  // this.black.rules = $event;
+  handleChangemodel($event:string){
+    console.log($event)
+
+  }
+ // 规则名字change事件
+  handleRulename($event:string){
+    console.log($event)
   }
  async handleOkTop() {
     let result:any;
@@ -326,11 +349,40 @@ handletableSize(pageSize:number){
 
    // this.isUser = false;
  }
+  // 添加记录跟不记录
   handleAddrecord($event:any){
+    this.addBlackList.mode = $event;
     console.log($event)
   }
   Adddomain($event:any){
+    this.addBlackList.match_pattern = $event;
     console.log($event)
+  }
+  // 添加checkbox 状态
+  handleCheckbox($event:boolean){
+    this.addBlackList.enable = $event;
+    console.log($event);
+  }
+  // 文本规则
+  handleRulename($event:string){
+    this.addBlackList.name = $event;
+    console.log($event)
+  }
+  // 文本域
+  handletextAr($event:string){
+    this.addBlackList.rules = $event;
+    console.log($event);
+  }
+  // 提交黑名单添加信息
+ async handleAddbtn(){
+    console.log(this.addBlackList)
+    let resule:any;
+    resule = await this.server.getRuequesaddblocklist(this.addBlackList.enable,this.addBlackList.mode,this.addBlackList.match_pattern,this.addBlackList.rules,this.addBlackList.name);
+    console.log(resule)
+   if(resule.msg === 'ok'){
+     this.createMessage(resule.msg)
+     this.visible2 = false;
+   }
   }
   onCurrentPageDataChange($event:any){
     console.log($event);
