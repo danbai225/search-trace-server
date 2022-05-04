@@ -114,15 +114,15 @@
          <tr *ngFor="let data of basicTable.data" class="table-tr">
            <ng-container *ngIf="!isEdit; else editTemplate">
              <td>{{ data?.username }}</td>
-             <td [nzChecked]="checked" [nzIndeterminate]="data.enable" (nzCheckedChange)="handleSelectChange($event,data)"></td>
+             <td [nzChecked]="checked" [nzIndeterminate]="data.enable" (nzCheckedChange)="handleSelectChange($event)"></td>
              <td>
-               <nz-select nzDisabled [ngModel]="data?.mode" (ngModelChange)="handleSelectChange($event,data)" [nzDropdownStyle]="{background:'#ffffff'}">
+               <nz-select nzDisabled [ngModel]="data?.mode" (ngModelChange)="handleSelectChange($event)" [nzDropdownStyle]="{background:'#ffffff'}">
                  <nz-option  [nzValue]="1" nzLabel="不记录"></nz-option>
                  <nz-option [nzValue]="2" nzLabel="记录"></nz-option>
                </nz-select>
              </td>
              <td>
-              <nz-select nzDisabled [ngModel]="data.match_pattern" (ngModelChange)="handlePatternChange($event,data)"  [nzDropdownStyle]="{background:'#ffffff'}">-->
+              <nz-select nzDisabled [ngModel]="data.match_pattern" (ngModelChange)="handlePatternChange($event)"  [nzDropdownStyle]="{background:'#ffffff'}">-->
               <nz-option [nzValue]="1" nzLabel="域名通配符"></nz-option>-->
               <nz-option [nzValue]="2" nzLabel="正则"></nz-option>-->
               </nz-select>

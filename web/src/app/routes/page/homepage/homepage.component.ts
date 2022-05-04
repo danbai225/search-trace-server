@@ -263,7 +263,7 @@ handletableSize(pageSize:number){
 
   }
   // 下拉框change mode 事件
-  handleSelectChange($event:number){
+  handleSelectChange($event:boolean){
     console.log($event)
   //  data.mode = $event;
   //  this.black.id = $event;
@@ -282,9 +282,9 @@ handletableSize(pageSize:number){
 
   }
  // 规则名字change事件
-  handleRulename($event:string){
-    console.log($event)
-  }
+  // handleRulename($event:string){
+  //   console.log($event)
+  // }
  async handleOkTop() {
     let result:any;
 
