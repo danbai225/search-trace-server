@@ -76,6 +76,7 @@ func LoginByPass(name, pass string) (token string, user *model.User, err error) 
 // UserGetOneByName 从数据库中查询用户根据用户名
 func UserGetOneByName(name string) (user *model.User, err error) {
 	tx := db.GetDBR()
+	defer tx.Commit()
 	u := model.User{}
 	err = tx.Model(&u).Where("name=?", name).First(&u).Error
 	if err != nil {
@@ -113,6 +114,7 @@ func UserCreate(user *model.User) (res *model.User, err error) {
 // UserList 用户列表
 func UserList() (res []*model.User, err error) {
 	tx := db.GetDBR()
+	defer tx.Commit()
 	res = make([]*model.User, 0)
 	err = tx.Model(&model.User{}).Find(&res).Error
 	for _, u := range res {

@@ -1,6 +1,7 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -33,7 +34,15 @@ func autoMigrate() {
 			tx.Callback()
 		}
 	}()
+
 	err = tx.AutoMigrate(&model.User{}, &model.Blacklist{}, &model.Word{})
+	if err == nil {
+		arr := make([]map[string]interface{}, 0)
+		err = tx.Raw("SHOW INDEX FROM `trace` WHERE Key_name=\"all_text_index\";").Scan(&arr).Error
+		if err == nil && len(arr) == 0 {
+			tx.Exec("CREATE FULLTEXT INDEX `all_text_index` ON `trace`(`title`,`content`) COMMENT '全文索引' /*!50100 WITH PARSER `ngram` */;")
+		}
+	}
 }
 func GetDBW() *gorm.DB {
 	if config.C.Db.Debug {
@@ -43,7 +52,9 @@ func GetDBW() *gorm.DB {
 }
 func GetDBR() *gorm.DB {
 	if config.C.Db.Debug {
-		return db.Debug().Begin()
+		return db.Debug().Begin(&sql.TxOptions{
+			ReadOnly: true,
+		})
 	}
 	return db
 }
