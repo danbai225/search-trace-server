@@ -115,6 +115,7 @@ func WordParseNewWords(text string) {
 // WordAssociate 关键字联想
 func WordAssociate(word string) (list []string, err error) {
 	tx := db.GetDBR()
+	defer tx.Commit()
 	list = make([]string, 0)
 	err = tx.Limit(10).Offset(0).Model(&model.Word{}).Where("word like ? AND word !=?", fmt.Sprint(word, "%"), word).Scan(&list).Error
 	return

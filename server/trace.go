@@ -26,6 +26,7 @@ func TraceSearchForKeyword(uName, key string, PageSize, PageNum int) (list []*mo
 		PageSize++
 	}
 	tx := db.GetDBR()
+	defer tx.Commit()
 	list = make([]*model.Trace, 0)
 	err = tx.Limit(PageSize).Offset((PageNum-1)*PageSize).Model(&model.Trace{}).Where("username=? AND Match(title,content) Against (?)", uName, key).Scan(&list).Error
 	total := int64(0)

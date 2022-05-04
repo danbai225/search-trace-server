@@ -9,7 +9,9 @@ import (
 
 func BlacklistList(userName string) (res []*model.Blacklist, err error) {
 	res = make([]*model.Blacklist, 0)
-	err = db.GetDBR().Model(&model.Blacklist{}).Where("username = ?", userName).Scan(&res).Error
+	tx := db.GetDBR()
+	defer tx.Commit()
+	err = tx.Model(&model.Blacklist{}).Where("username = ?", userName).Scan(&res).Error
 	return
 }
 func BlacklistAdd(blacklist *model.Blacklist) (res *model.Blacklist, err error) {
