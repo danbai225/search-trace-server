@@ -103,7 +103,22 @@ export class HomepageComponent implements OnInit {
     // resule = await  this.server.getRuequesblocklist()
     this.isEdit = false;
   }
-
+  // 搜索回车事件
+ async EnterGetData(title:string){
+    let result:any;
+    result = await this.server.getRequestKeyword(title);
+    if( result.msg === 'ok'){
+      this.lists = result.data;
+      this.datalength = this.lists.page_total;
+      this.isShow = false;
+      //  分页数据
+      this.PageIndex = this.lists.page_num.toString();
+      this.Total = this.lists.page_total.toString();
+      this.PageSize = this.lists.list.length.toString();
+    }else{
+      console.log(result);
+    }
+  }
   updateEditCache(): void {
 
   }
@@ -160,7 +175,8 @@ export class HomepageComponent implements OnInit {
     result = await this.server.getRequestKeyword(word);
     if( result.msg === 'ok'){
        this.lists = result.data;
-       this.datalength = this.lists.list.length;
+
+       this.datalength = this.lists.page_total;
        this.isShow = false;
       //  分页数据
       this.PageIndex = this.lists.page_num.toString();

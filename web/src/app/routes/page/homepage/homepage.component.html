@@ -3,7 +3,7 @@
     <div class="content" nzSearch>
       <div class="input">
         <nz-input-group  nzSize="large"  [nzSuffix]="suffixIconSearch">
-          <input type="search"   [(ngModel)]="searchString"   (ngModelChange)="handleSearchChange($event)"  nz-input placeholder="在寻记上搜索历史内容"  />
+          <input type="search"   [(ngModel)]="searchString"   (ngModelChange)="handleSearchChange($event)" (keyup.enter)="EnterGetData(searchString)"   nz-input placeholder="在寻记上搜索历史内容"  />
         </nz-input-group>
         <ng-template #suffixIconSearch>
           <fa-icon [icon]="faTimes" (click)="handleError() " ></fa-icon>
@@ -38,10 +38,14 @@
   <nz-divider></nz-divider>
   <nz-content>
     <ng-http-loader></ng-http-loader>
-    <p>找到约 {{datalength}} 条结果</p>
+    <p *ngIf="datalength">找到约 {{datalength}} 条结果</p>
     <div *ngIf="lists?.list">
       <article  nz-typography  *ngFor="let item of lists.list">
-        <h6 nz-typography><a href="{{item.url}}">{{item.title}}</a><fa-icon [icon]="isDownUp?faAngleDown:faAngleUp" (click)="handleadIconDown()"fa-lg ></fa-icon><i (click)="handleTodo()" >{{isDownUp?item.username:item.created_at}}</i></h6>
+        <h6 nz-typography><a href="{{item.url}}">{{item.title}}</a>
+<!-- <fa-icon [icon]="isDownUp?faAngleDown:faAngleUp" (click)="handleadIconDown()"fa-lg ></fa-icon>-->
+<!--          <i (click)="handleTodo()" >{{isDownUp?item.username:item.created_at}}</i></h6>-->
+
+          <i style="padding-left:'10px'">{{item.url | UrlRealsPipe}}</i> <span style="float: right">{{item.created_at}}</span></h6>
         <p nz-typography
         nzEllipsis
         [nzEllipsisRows]="2"

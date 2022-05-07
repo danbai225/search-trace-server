@@ -6,12 +6,12 @@ import { WebServerService } from "../../server/web-server.service"
 import { CommonModule } from '@angular/common';
 import { HomepageComponent } from './homepage/homepage.component';
 import {NgHttpLoaderModule} from "ng-http-loader";
-
+import {UrlRealsPipePipe} from "./url-realse.pipe";
 const COMPONENTS = [HomepageComponent];
 
 @NgModule({
   providers:[WebServerService],
   imports: [SharedModule,PageRoutingModule,ReactiveFormsModule,CommonModule,NgHttpLoaderModule],
-  declarations: [...COMPONENTS]
+  declarations: [...COMPONENTS,UrlRealsPipePipe]
 })
 export class HomeModule {}
