@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"time"
 )
 
 type Config struct {
@@ -16,7 +17,8 @@ type Config struct {
 		Port   int    `json:"port"`
 		Debug  bool   `json:"debug"`
 	} `json:"db"`
-	Production bool `json:"production"`
+	Production bool       `json:"production"`
+	InitTime   *time.Time `json:"init_time"`
 }
 
 var C = Config{}
@@ -43,4 +45,10 @@ func Load() error {
 func LoadF(conf string) error {
 	f = conf
 	return Load()
+}
+func Save() {
+	marshal, err := json.Marshal(C)
+	if err == nil {
+		ioutil.WriteFile(f, marshal, os.ModePerm)
+	}
 }

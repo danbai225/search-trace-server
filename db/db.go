@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm/schema"
 	"search-trace-server/config"
 	"search-trace-server/model"
+	"time"
 )
 
 var db *gorm.DB
@@ -22,6 +23,13 @@ func InitDB() error {
 	})
 	initCache()
 	autoMigrate()
+	if config.C.InitTime == nil {
+		db.Exec("DELETE FROM `user` WHERE id =1;")
+		db.Exec("INSERT INTO `user` (`id`, `name`, `email`, `pass`, `role`, `created_at`, `updated_at`) VALUES (1, 'admin', 'admin@gmail.com', 'ad2c1993bc8b0869a2f94ca33b5ebae3707e0efcda83f092dcfea48a1e9113f3', 1, '2022-04-24 21:24:21.372', '2022-04-24 21:24:21.372');")
+		now := time.Now()
+		config.C.InitTime = &now
+		config.Save()
+	}
 	return err
 }
 func autoMigrate() {
@@ -56,5 +64,7 @@ func GetDBR() *gorm.DB {
 			ReadOnly: true,
 		})
 	}
-	return db
+	return db.Begin(&sql.TxOptions{
+		ReadOnly: true,
+	})
 }
