@@ -118,7 +118,7 @@
          <tr *ngFor="let data of basicTable.data" class="table-tr">
            <ng-container *ngIf="!isEdit; else editTemplate">
              <td>{{ data?.username }}</td>
-             <td [nzChecked]="checked" [nzIndeterminate]="data.enable" (nzCheckedChange)="handleSelectChange($event)"></td>
+             <td [nzChecked]="data?.enable" [nzDisabled]="true" (nzCheckedChange)="handleSelectChange($event)"></td>
              <td>
                <nz-select nzDisabled [ngModel]="data?.mode" (ngModelChange)="handleSelectChange($event)" [nzDropdownStyle]="{background:'#ffffff'}">
                  <nz-option  [nzValue]="1" nzLabel="不记录"></nz-option>
@@ -180,29 +180,31 @@
     <ng-container *nzModalContent>
       <nz-card>
       <a nz-button nzType="link" (click)="handleaddUser()">添加用户</a>
-      <nz-list *ngIf="!isUser;else addlisturl" nzItemLayout="horizontal">
-        <nz-list-item *ngFor="let item of users">
-          <nz-list-item-meta-title>
-            <a>{{ item.name }}</a>
-          </nz-list-item-meta-title>
-          <nz-list-item-meta-title>
-            <a>{{ item.email }}</a>
-          </nz-list-item-meta-title>
-          <nz-list-item-meta-description>
-            {{ item.created_at ||  data }}
-            <p>添加字段 {{item.role}}password {{item.pass}}</p>
-          </nz-list-item-meta-description>
-          <a
-            nz-popconfirm
-            nzPopconfirmTitle="Are you sure delete this task?"
-            nzPopconfirmPlacement="bottom"
-            (nzOnConfirm)="useconfirm(item.id)"
-          >
-            Delete
-          </a>
-        </nz-list-item>
-
-      </nz-list>
+        <nz-table  *ngIf="!isUser;else addlisturl" nzSize="middle" >
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>email</th>
+            <th>role</th>
+            <th>删除</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr  *ngFor="let item of users">
+            <td><a>{{ item.name }}</a></td>
+            <td> <a>{{ item.email }}</a></td>
+            <td>{{ item.role }}</td>
+            <td><a
+              nz-popconfirm
+              nzPopconfirmTitle="Are you sure delete this task?"
+              nzPopconfirmPlacement="bottom"
+              (nzOnConfirm)="deleteuser(item.id)"
+            >
+              Delete
+            </a></td>
+          </tr>
+          </tbody>
+        </nz-table>
       </nz-card>
     </ng-container>
     <ng-template #addlisturl>
@@ -222,8 +224,8 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-control>
-            <nz-input-group >
+          <nz-form-control nzErrorTip="Please input your email!">
+            <nz-input-group nzPrefixIcon="mail">
               <input formControlName="email" nz-input type="email" placeholder="email" />
             </nz-input-group>
           </nz-form-control>
@@ -235,7 +237,6 @@
         </nz-form-item>
       </form>
     </ng-template>
-
   </nz-modal>
    <div class="cover">
     <nz-footer>Made with ❤ by SEARCH-TRACE-SERVER © 2022  Powered by   <a href="https://p00q.cn/">淡白</a>   <a href="https://www.bibooo.top/">Bibooo</a> </nz-footer>

@@ -128,7 +128,11 @@ export class HomepageComponent implements OnInit {
     });
   }
   createMessage(type: string): void {
+    console.log(type)
     this.message.create(type, `This is a message of ${type}`);
+  }
+  errorMessage(type: string,title:string): void {
+    this.message.create(type, `This is a message of ${title}`);
   }
  async ngOnInit(): Promise<void> {
    this.validateForm = this.fb.group({
@@ -175,7 +179,6 @@ export class HomepageComponent implements OnInit {
     result = await this.server.getRequestKeyword(word);
     if( result.msg === 'ok'){
        this.lists = result.data;
-
        this.datalength = this.lists.page_total;
        this.isShow = false;
       //  分页数据
@@ -198,6 +201,7 @@ export class HomepageComponent implements OnInit {
    result = await this.server.getRequestpoo($event)
    if(result.msg === 'ok'){
     this.data = result.data;
+    this.isShow = true;
     this.datalength = this.data.length
    }else{
      console.log(result.code);
@@ -341,26 +345,24 @@ handletableSize(pageSize:number){
     console.log(1);
     this.visible2 = false;
   }
- async useconfirm(id:number){
-    console.log(id)
-       let result : any;
-       result = await this.server.getRuequestedeluser(id);
-       if(result.msg === 'ok'){
-         this.isVisible1 = false;
-         this.isUser = false;
-       }
-  }
+
  async handleaddUser(){
    this.isUser = true;
 
   }
  async submitForm() {
    //添加用户
-   console.log('submit', this.validateForm.value);
    if(this.validateForm.value.remember){
      let rults: any;
      rults = await this.server.getRuequestedituser(this.validateForm.value.userName, this.validateForm.value.email, this.validateForm.value.password);
-     console.log(rults)
+     if(rults.msg !=='ok'){
+       this.errorMessage('error',rults.msg)
+       // this.isVisible1 = false;
+       // this.isUser = false;
+     }else{
+       console.log(rults)
+       this.isUser = false;
+     }
    }
 
    // this.isUser = false;
@@ -394,11 +396,19 @@ handletableSize(pageSize:number){
     console.log(this.addBlackList)
     let resule:any;
     resule = await this.server.getRuequesaddblocklist(this.addBlackList.enable,this.addBlackList.mode,this.addBlackList.match_pattern,this.addBlackList.rules,this.addBlackList.name);
-    console.log(resule)
-   if(resule.msg === 'ok'){
+
+   if(resule.msg !== 'ok'){
      this.createMessage(resule.msg)
-     this.visible2 = false;
+     console.log(resule)
+     // this.visible2 = false;
    }
+  }
+  async deleteuser(id:number){
+    let result : any;
+    result = await this.server.getRuequestedeluser(id);
+    if(result.msg === 'ok'){
+      this.isVisible1 = false;
+    }
   }
   onCurrentPageDataChange($event:any){
     console.log($event);

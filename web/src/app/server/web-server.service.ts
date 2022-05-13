@@ -117,7 +117,6 @@ export class WebServerService {
   }
 // 添加编辑用户信息
   getRuequestedituser(Onename:string,Oneemail:string,Onepass:string){
-    console.log(Onename,Oneemail,Onepass)
     return new Promise((resolve,reject)=>{
       this.http.post(`${this.baseUrl()}/api/v1/user/add`,{
         name:Onename,
@@ -130,7 +129,7 @@ export class WebServerService {
     })
   }
   //删除用户信息
-  getRuequestedeluser(id:number,){
+  getRuequestedeluser(id:number){
     return new Promise((resolve,reject)=>{
       this.http.post(`${this.baseUrl()}/api/v1/user/del`,{
         id:id

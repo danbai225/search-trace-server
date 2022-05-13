@@ -6,12 +6,14 @@ import {
   LockOutline,
   UserOutline,
   SearchOutline,
+  MailOutline
 } from '@ant-design/icons-angular/icons';
 
 const icons: IconDefinition[] = [
   UserOutline,
   LockOutline,
-  SearchOutline
+  SearchOutline,
+  MailOutline
 ];
 @NgModule({
   declarations: [],
