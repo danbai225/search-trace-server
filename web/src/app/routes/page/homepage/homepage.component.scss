@@ -1,5 +1,12 @@
 .ant-layout{
   background-color: #FFFFFF;
+  .result{
+    ul{
+      li{
+        cursor:pointer;
+      }
+    }
+  }
   .ant-layout-header{
     width: 100%;
     display: flex;

@@ -5,7 +5,7 @@ import { faWheelchair,faSearch,faTimes,faAngleDown,faAngleUp,faBars} from '@fort
 import { NumberInput } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { WebServerService } from "../../../server/web-server.service";
-
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 
 
@@ -79,6 +79,15 @@ export class HomepageComponent implements OnInit {
   // 添加黑名单
   addBlackList : blackList = {
     enable: true, match_pattern: 1, mode: 1, name: "", rules: ""
+  };
+  isVisible3:boolean=false;
+  handlePassCancel(){
+    console.log('Button cancel clicked!');
+    this.isVisible3 = false;
+  }
+  handlePassOk(){
+    console.log('Button ok clicked!');
+    this.isVisible3 = false;
   }
 
   startEdit(id: string): void {
@@ -122,7 +131,7 @@ export class HomepageComponent implements OnInit {
   updateEditCache(): void {
 
   }
-  constructor(private formBuilder: FormBuilder,public msg: NzMessageService,private server:WebServerService,private router:Router,private fb: FormBuilder,private message: NzMessageService) {
+  constructor(private formBuilder: FormBuilder,public msg: NzMessageService,private server:WebServerService,private router:Router,private fb: FormBuilder,private message: NzMessageService,private modal: NzModalService) {
     this.form = this.formBuilder.group({
       comment: [null, [Validators.maxLength(100)]]
     });
@@ -179,7 +188,7 @@ export class HomepageComponent implements OnInit {
     result = await this.server.getRequestKeyword(word);
     if( result.msg === 'ok'){
        this.lists = result.data;
-       this.datalength = this.lists.page_total;
+       this.datalength = this.lists.total;
        this.isShow = false;
       //  分页数据
       this.PageIndex = this.lists.page_num.toString();
@@ -222,6 +231,7 @@ export class HomepageComponent implements OnInit {
 
   // 页面改变的回调
  async handlePageindexChange(page:number){
+    console.log(page);
     let result:any;
     result = await this.server.getRequestKeyword(this.word,parseInt(this.PageSize),page);
     this.lists = result.data;
@@ -317,6 +327,7 @@ handletableSize(pageSize:number){
   handleCancelTop(): void {
     this.isVisibleTop = false;
     this.isEdit = false;
+
   }
   //用户管理
  async showUserAdmin(){
@@ -332,6 +343,7 @@ handletableSize(pageSize:number){
   }
   handleCancel(){
     this.isVisible1 = false;
+    this.isUser = false;
   }
   handleOk(){
     this.isVisible1 = false;
@@ -361,6 +373,7 @@ handletableSize(pageSize:number){
        // this.isUser = false;
      }else{
        console.log(rults)
+       this.isVisible1 = false;
        this.isUser = false;
      }
    }
@@ -409,6 +422,10 @@ handletableSize(pageSize:number){
     if(result.msg === 'ok'){
       this.isVisible1 = false;
     }
+  }
+  showConfirm(item:any) {
+    console.log(item);
+    this.isVisible3 = true;
   }
   onCurrentPageDataChange($event:any){
     console.log($event);
