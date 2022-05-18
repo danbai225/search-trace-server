@@ -1,5 +1,5 @@
 git pull
-tag=$(git describe --abbrev=0)
+tag=$(git describe --abbrev=0 --tags)
 if [[ $tag == "" ]]
 then
     tag="build"
