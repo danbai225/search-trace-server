@@ -1,7 +1,7 @@
 version: "3"
 services:
   search-trace-server:
-    image: danbai225/search-trace-server:build
+    image: danbai225/search-trace-server:latest
     container_name: search-trace-server
     restart: always
     volumes:

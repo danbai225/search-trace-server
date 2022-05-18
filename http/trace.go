@@ -62,12 +62,13 @@ func cTraceSearchKeyword() func(r *ghttp.Request) {
 			return
 		}
 		u := r.Context().Value("user").(*model.User)
-		list, PageTotal, err := server.TraceSearchForKeyword(u.Name, req.Key, req.PageSize, req.PageNum)
+		list, PageTotal, total, err := server.TraceSearchForKeyword(u.Name, req.Key, req.PageSize, req.PageNum)
 		if err == nil {
 			_ = r.Response.WriteJson(Msg{}.ok(g.Map{
 				"list":       list,
 				"page_total": PageTotal,
 				"page_num":   req.PageNum,
+				"total":      total,
 			}))
 		} else {
 			_ = r.Response.WriteJson(Msg{}.err("搜索失败"))

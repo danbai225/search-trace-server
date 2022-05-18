@@ -6,7 +6,7 @@
     "user": "",
     "pass": "",
     "port": 0,
-    "debug": true
+    "debug": false
   },
-  "production": false
+  "production": true
 }
