@@ -68,7 +68,7 @@ func (MeiliSearchTraceServer) TraceSearchForKeyword(uName, key string, PageSize,
 	if PageNum < 0 {
 		PageNum = 1
 	}
-	of := int64((PageSize - 1) * PageNum)
+	of := int64((PageNum - 1) * PageSize)
 	search, err := index.Search(key, &meilisearch.SearchRequest{
 		Offset: of,
 		Limit:  int64(PageSize),
