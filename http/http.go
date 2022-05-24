@@ -9,6 +9,8 @@ import (
 	"io"
 	"os"
 	"search-trace-server/config"
+	"search-trace-server/server"
+	"strings"
 )
 
 func Start() {
@@ -18,6 +20,14 @@ func Start() {
 	}
 	if !config.C.Production {
 		arr = append(arr, os.Stdout)
+	}
+	switch strings.ToLower(config.C.SearchEngine) {
+	case "mysql":
+		traceServer = server.MySQLTraceServer{}
+	case "meili_search":
+		traceServer = server.MeiliSearchTraceServer{}
+	default:
+		traceServer = server.MySQLTraceServer{}
 	}
 	s.SetLogger(glog.NewWithWriter(io.MultiWriter(arr...)))
 	s.SetPort(49492)

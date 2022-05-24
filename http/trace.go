@@ -13,6 +13,8 @@ type cTraceAddReq struct {
 	Content string `json:"content" v:"required#Content"`
 }
 
+var traceServer server.TraceServer
+
 func cTraceAdd() func(r *ghttp.Request) {
 	return func(r *ghttp.Request) {
 		trace := &cTraceAddReq{}
@@ -36,7 +38,7 @@ func cTraceAdd() func(r *ghttp.Request) {
 			Url:      trace.Url,
 			Content:  trace.Content,
 		}
-		err := server.TraceCreate(&trace2)
+		err := traceServer.TraceCreate(&trace2)
 		if err == nil {
 			_ = r.Response.WriteJson(Msg{}.ok(nil))
 		} else {
@@ -62,7 +64,7 @@ func cTraceSearchKeyword() func(r *ghttp.Request) {
 			return
 		}
 		u := r.Context().Value("user").(*model.User)
-		list, PageTotal, total, err := server.TraceSearchForKeyword(u.Name, req.Key, req.PageSize, req.PageNum)
+		list, PageTotal, total, err := traceServer.TraceSearchForKeyword(u.Name, req.Key, req.PageSize, req.PageNum)
 		if err == nil {
 			_ = r.Response.WriteJson(Msg{}.ok(g.Map{
 				"list":       list,

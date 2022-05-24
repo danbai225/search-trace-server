@@ -8,5 +8,10 @@
     "port": 0,
     "debug": false
   },
-  "production": true
+  "production": true,
+  "meili_search": {
+    "url": "",
+    "key": ""
+  },
+  "search_engine": "meili_search"
 }

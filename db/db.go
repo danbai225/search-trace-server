@@ -3,11 +3,13 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"github.com/meilisearch/meilisearch-go"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"search-trace-server/config"
 	"search-trace-server/model"
+	"strings"
 	"time"
 )
 
@@ -48,7 +50,26 @@ func autoMigrate() {
 		arr := make([]map[string]interface{}, 0)
 		err = tx.Raw("SHOW INDEX FROM `trace` WHERE Key_name=\"all_text_index\";").Scan(&arr).Error
 		if err == nil && len(arr) == 0 {
-			tx.Exec("CREATE FULLTEXT INDEX `all_text_index` ON `trace`(`title`,`content`) COMMENT '全文索引' /*!50100 WITH PARSER `ngram` */;")
+			if strings.ToLower(config.C.SearchEngine) == "mysql" || config.C.SearchEngine == "" {
+				tx.Exec("CREATE FULLTEXT INDEX `all_text_index` ON `trace`(`title`,`content`) COMMENT '全文索引' /*!50100 WITH PARSER `ngram` */;")
+			} else if strings.ToLower(config.C.SearchEngine) == "meili_search" {
+				tx.Exec("DROP INDEX trace ON all_text_index;")
+				searchClient := GetMeiliSearchClient()
+				index, err2 := searchClient.GetIndex("trace")
+				if err2 != nil {
+					panic(err2)
+				}
+				index.UpdateIndex("id")
+				index.UpdateSettings(&meilisearch.Settings{
+					SearchableAttributes: []string{
+						"title",
+						"content",
+					},
+					FilterableAttributes: []string{
+						"username",
+					},
+				})
+			}
 		}
 	}
 }
@@ -67,4 +88,16 @@ func GetDBR() *gorm.DB {
 	return db.Begin(&sql.TxOptions{
 		ReadOnly: true,
 	})
+}
+
+var client *meilisearch.Client
+
+func GetMeiliSearchClient() *meilisearch.Client {
+	if client == nil {
+		client = meilisearch.NewClient(meilisearch.ClientConfig{
+			Host:   config.C.MeiliSearch.Url,
+			APIKey: config.C.MeiliSearch.Key,
+		})
+	}
+	return client
 }

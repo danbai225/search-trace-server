@@ -1,12 +1,22 @@
 package server
 
 import (
+	"encoding/json"
+	"github.com/meilisearch/meilisearch-go"
 	"search-trace-server/db"
 	"search-trace-server/model"
 )
 
+type TraceServer interface {
+	TraceCreate(trace *model.Trace) (err error)
+	TraceSearchForKeyword(uName, key string, PageSize, PageNum int) (list []*model.Trace, PageTotal int64, total int64, err error)
+}
+
+type MySQLTraceServer struct{}
+type MeiliSearchTraceServer struct{}
+
 // TraceCreate 新建记录
-func TraceCreate(trace *model.Trace) (err error) {
+func (MySQLTraceServer) TraceCreate(trace *model.Trace) (err error) {
 	begin := db.GetDBW()
 	defer func() {
 		if err != nil {
@@ -21,7 +31,7 @@ func TraceCreate(trace *model.Trace) (err error) {
 }
 
 // TraceSearchForKeyword 关键字搜索
-func TraceSearchForKeyword(uName, key string, PageSize, PageNum int) (list []*model.Trace, PageTotal int64, total int64, err error) {
+func (MySQLTraceServer) TraceSearchForKeyword(uName, key string, PageSize, PageNum int) (list []*model.Trace, PageTotal int64, total int64, err error) {
 	if PageSize == 0 {
 		PageSize++
 	}
@@ -34,5 +44,46 @@ func TraceSearchForKeyword(uName, key string, PageSize, PageNum int) (list []*mo
 	if total%int64(PageSize) != 0 {
 		PageTotal++
 	}
+	return
+}
+
+// TraceCreate 新建记录
+func (MeiliSearchTraceServer) TraceCreate(trace *model.Trace) (err error) {
+	err = MySQLTraceServer{}.TraceCreate(trace)
+	if err != nil {
+		return err
+	}
+	index, err := db.GetMeiliSearchClient().GetIndex("trace")
+	if err != nil {
+		return err
+	}
+	_, err = index.AddDocuments(trace, "id")
+	return err
+}
+
+// TraceSearchForKeyword 关键字搜索
+func (MeiliSearchTraceServer) TraceSearchForKeyword(uName, key string, PageSize, PageNum int) (list []*model.Trace, PageTotal int64, total int64, err error) {
+	list = make([]*model.Trace, 0)
+	index, err := db.GetMeiliSearchClient().GetIndex("trace")
+	if PageNum < 0 {
+		PageNum = 1
+	}
+	of := int64((PageNum - 1) * PageSize)
+	search, err := index.Search(key, &meilisearch.SearchRequest{
+		Offset: of,
+		Limit:  int64(PageNum),
+		Filter: "username=" + uName,
+	})
+	if err != nil {
+		return list, 0, 0, err
+	}
+	if search.NbHits%int64(PageNum) == 0 {
+		PageTotal = search.NbHits / int64(PageNum)
+	} else {
+		PageTotal = search.NbHits/int64(PageNum) + 1
+	}
+	total = search.NbHits
+	marshalJSON, _ := json.Marshal(search.Hits)
+	err = json.Unmarshal(marshalJSON, &list)
 	return
 }

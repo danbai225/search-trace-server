@@ -17,8 +17,13 @@ type Config struct {
 		Port   int    `json:"port"`
 		Debug  bool   `json:"debug"`
 	} `json:"db"`
-	Production bool       `json:"production"`
-	InitTime   *time.Time `json:"init_time"`
+	MeiliSearch struct {
+		Url string `json:"url"`
+		Key string `json:"key"`
+	} `json:"meili_search"`
+	SearchEngine string     `json:"search_engine"`
+	Production   bool       `json:"production"`
+	InitTime     *time.Time `json:"init_time"`
 }
 
 var C = Config{}
