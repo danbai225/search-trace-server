@@ -68,19 +68,19 @@ func (MeiliSearchTraceServer) TraceSearchForKeyword(uName, key string, PageSize,
 	if PageNum < 0 {
 		PageNum = 1
 	}
-	of := int64((PageNum - 1) * PageSize)
+	of := int64((PageSize - 1) * PageNum)
 	search, err := index.Search(key, &meilisearch.SearchRequest{
 		Offset: of,
-		Limit:  int64(PageNum),
+		Limit:  int64(PageSize),
 		Filter: "username=" + uName,
 	})
 	if err != nil {
 		return list, 0, 0, err
 	}
-	if search.NbHits%int64(PageNum) == 0 {
-		PageTotal = search.NbHits / int64(PageNum)
+	if search.NbHits%int64(PageSize) == 0 {
+		PageTotal = search.NbHits / int64(PageSize)
 	} else {
-		PageTotal = search.NbHits/int64(PageNum) + 1
+		PageTotal = search.NbHits/int64(PageSize) + 1
 	}
 	total = search.NbHits
 	marshalJSON, _ := json.Marshal(search.Hits)
