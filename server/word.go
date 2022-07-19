@@ -58,7 +58,7 @@ func WordCreate(word string) (err error) {
 	tx := db.GetDBW()
 	defer func() {
 		if err != nil {
-			tx.Callback()
+			tx.Rollback()
 			if strings.Contains(err.Error(), "Duplicate") {
 				db.GetCache().Add(fmt.Sprint(wordCachePrefix, word), wordCacheTime, true)
 			}
@@ -77,7 +77,7 @@ func WordCreateList(words []string) {
 	for _, word := range words {
 		err := tx.Create(&model.Word{Word: word}).Error
 		if err != nil {
-			tx.Callback()
+			tx.Rollback()
 			if strings.Contains(err.Error(), "Duplicate") {
 				db.GetCache().Add(fmt.Sprint(wordCachePrefix, word), wordCacheTime, true)
 			}

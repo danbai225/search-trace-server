@@ -20,7 +20,7 @@ func BlacklistAdd(blacklist *model.Blacklist) (res *model.Blacklist, err error) 
 		if err == nil {
 			tx.Commit()
 		} else {
-			tx.Callback()
+			tx.Rollback()
 		}
 	}()
 	if blacklist.ID == 0 {
@@ -38,7 +38,7 @@ func BlacklistDelete(u *model.User, id int64) (res *model.Blacklist, err error) 
 		if err == nil {
 			tx.Commit()
 		} else {
-			tx.Callback()
+			tx.Rollback()
 		}
 	}()
 	blacklist := model.Blacklist{}
@@ -58,7 +58,7 @@ func BlacklistAddDomain(domain, uname string) (err error) {
 		if err == nil {
 			tx.Commit()
 		} else {
-			tx.Callback()
+			tx.Rollback()
 		}
 	}()
 	domain = fmt.Sprint("*://", domain, "*")
@@ -94,7 +94,7 @@ func BlacklistDelDomain(domain, uname string) (err error) {
 		if err == nil {
 			tx.Commit()
 		} else {
-			tx.Callback()
+			tx.Rollback()
 		}
 	}()
 	domain = fmt.Sprint("*://", domain, "*")

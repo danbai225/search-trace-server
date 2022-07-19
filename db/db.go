@@ -41,7 +41,7 @@ func autoMigrate() {
 		if err == nil {
 			tx.Commit()
 		} else {
-			tx.Callback()
+			tx.Rollback()
 		}
 	}()
 

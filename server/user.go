@@ -91,7 +91,7 @@ func UserCreate(user *model.User) (res *model.User, err error) {
 	tx := db.GetDBW()
 	defer func() {
 		if err != nil {
-			tx.Callback()
+			tx.Rollback()
 		} else {
 			tx.Commit()
 		}
@@ -129,7 +129,7 @@ func UserDelete(id int64) (res *model.User, err error) {
 		if err == nil {
 			tx.Commit()
 		} else {
-			tx.Callback()
+			tx.Rollback()
 		}
 	}()
 	user := model.User{}

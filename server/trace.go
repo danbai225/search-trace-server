@@ -20,7 +20,7 @@ func (MySQLTraceServer) TraceCreate(trace *model.Trace) (err error) {
 	begin := db.GetDBW()
 	defer func() {
 		if err != nil {
-			begin.Callback()
+			begin.Rollback()
 		} else {
 			begin.Commit()
 		}
