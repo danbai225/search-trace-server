@@ -77,7 +77,11 @@ func (MeiliSearchTraceServer) TraceSearchForKeyword(uName, key string, PageSize,
 	if err != nil {
 		return list, 0, 0, err
 	}
-	total = search.TotalHits
+	total = search.EstimatedTotalHits
+	PageTotal = total / int64(PageSize)
+	if total%int64(PageSize) != 0 {
+		PageTotal++
+	}
 	marshalJSON, _ := json.Marshal(search.Hits)
 	err = json.Unmarshal(marshalJSON, &list)
 	return

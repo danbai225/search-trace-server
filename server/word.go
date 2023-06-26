@@ -8,8 +8,6 @@ import (
 	"github.com/gogf/gf/v2/container/gset"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/gtimer"
-	"github.com/yanyiwu/gojieba"
-	"search-trace-server/config"
 	"search-trace-server/db"
 	"search-trace-server/model"
 	"strings"
@@ -29,17 +27,15 @@ var (
 
 func InitWordServer() {
 	go func() {
-		if !config.C.LiteMode {
-			err := seg.LoadDictEmbed()
-			if err != nil {
-				logs.Err(err)
-				return
-			}
-			err = seg.LoadStopEmbed()
-			if err != nil {
-				logs.Err(err)
-				return
-			}
+		err := seg.LoadDictEmbed()
+		if err != nil {
+			logs.Err(err)
+			return
+		}
+		err = seg.LoadStopEmbed()
+		if err != nil {
+			logs.Err(err)
+			return
 		}
 		gtimer.Add(ctx, time.Minute, func(ctx context.Context) {
 			slice := setWords.Slice()
@@ -77,7 +73,6 @@ func WordCreateList(words []string) {
 	for _, word := range words {
 		err := tx.Create(&model.Word{Word: word}).Error
 		if err != nil {
-			tx.Rollback()
 			if strings.Contains(err.Error(), "Duplicate") {
 				db.GetCache().Add(fmt.Sprint(wordCachePrefix, word), wordCacheTime, true)
 			}
@@ -90,13 +85,7 @@ func WordCreateList(words []string) {
 func WordParseNewWords(text string) {
 	cache := db.GetCache()
 	var search []string
-	if config.C.LiteMode {
-		x := gojieba.NewJieba()
-		defer x.Free()
-		search = x.CutForSearch(text, true)
-	} else {
-		search = seg.CutSearch(text, true)
-	}
+	search = seg.CutSearch(text, true)
 	words := make([]string, 0)
 	for _, w := range search {
 		if len(w) > 4 {
