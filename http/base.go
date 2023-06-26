@@ -14,7 +14,7 @@ func cGetToken() func(r *ghttp.Request) {
 	return func(r *ghttp.Request) {
 		req := &cGetTokenReq{}
 		if err := r.Parse(req); err != nil {
-			_ = r.Response.WriteJsonExit(Msg{
+			r.Response.WriteJsonExit(Msg{
 				Code: errCode,
 				Msg:  err.Error(),
 			})
@@ -27,6 +27,6 @@ func cGetToken() func(r *ghttp.Request) {
 		} else {
 			msg = msg.err("验证不通过")
 		}
-		_ = r.Response.WriteJson(msg)
+		r.Response.WriteJson(msg)
 	}
 }

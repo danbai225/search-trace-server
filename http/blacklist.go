@@ -12,9 +12,9 @@ func cBlacklistList() func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
 			list, err := server.BlacklistList(c.GetUser().Name)
 			if err == nil {
-				_ = c.Response.WriteJson(Msg{}.ok(list))
+				c.Response.WriteJson(Msg{}.ok(list))
 			} else {
-				_ = c.Response.WriteJson(Msg{}.err("查询失败"))
+				c.Response.WriteJson(Msg{}.err("查询失败"))
 			}
 		}(&ctx.Ctx{Request: c})
 	}
@@ -34,7 +34,7 @@ func cBlacklistAdd() func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
 			req := &cBlacklistAddReq{}
 			if err := c.Parse(req); err != nil {
-				_ = c.Response.WriteJsonExit(Msg{
+				c.Response.WriteJsonExit(Msg{
 					Code: errCode,
 					Msg:  err.Error(),
 				})
@@ -50,9 +50,9 @@ func cBlacklistAdd() func(c *ghttp.Request) {
 				Rules:        req.Rules,
 			})
 			if err == nil {
-				_ = c.Response.WriteJson(Msg{}.ok(list))
+				c.Response.WriteJson(Msg{}.ok(list))
 			} else {
-				_ = c.Response.WriteJson(Msg{}.err("修改失败"))
+				c.Response.WriteJson(Msg{}.err("修改失败"))
 			}
 		}(&ctx.Ctx{Request: c})
 	}
@@ -68,7 +68,7 @@ func cBlacklistDel() func(c *ghttp.Request) {
 			u := c.GetUser()
 			req := &cBlacklistDelReq{}
 			if err := c.Parse(req); err != nil {
-				_ = c.Response.WriteJsonExit(Msg{
+				c.Response.WriteJsonExit(Msg{
 					Code: errCode,
 					Msg:  err.Error(),
 				})
@@ -76,9 +76,9 @@ func cBlacklistDel() func(c *ghttp.Request) {
 			}
 			res, err := server.BlacklistDelete(u, req.Id)
 			if err == nil {
-				_ = c.Response.WriteJson(Msg{}.ok(res))
+				c.Response.WriteJson(Msg{}.ok(res))
 			} else {
-				_ = c.Response.WriteJson(Msg{}.err("删除失败"))
+				c.Response.WriteJson(Msg{}.err("删除失败"))
 			}
 		}(&ctx.Ctx{Request: c})
 	}
@@ -94,7 +94,7 @@ func cBlacklistAddDomain() func(c *ghttp.Request) {
 			u := c.GetUser()
 			req := &cBlacklistAddDomainReq{}
 			if err := c.Parse(req); err != nil {
-				_ = c.Response.WriteJsonExit(Msg{
+				c.Response.WriteJsonExit(Msg{
 					Code: errCode,
 					Msg:  err.Error(),
 				})
@@ -102,9 +102,9 @@ func cBlacklistAddDomain() func(c *ghttp.Request) {
 			}
 			err := server.BlacklistAddDomain(req.Domain, u.Name)
 			if err == nil {
-				_ = c.Response.WriteJson(Msg{}.ok(nil))
+				c.Response.WriteJson(Msg{}.ok(nil))
 			} else {
-				_ = c.Response.WriteJson(Msg{}.err("增加失败"))
+				c.Response.WriteJson(Msg{}.err("增加失败"))
 			}
 		}(&ctx.Ctx{Request: c})
 	}
@@ -120,7 +120,7 @@ func cBlacklistDelDomain() func(c *ghttp.Request) {
 			u := c.GetUser()
 			req := &cBlacklistDelDomainReq{}
 			if err := c.Parse(req); err != nil {
-				_ = c.Response.WriteJsonExit(Msg{
+				c.Response.WriteJsonExit(Msg{
 					Code: errCode,
 					Msg:  err.Error(),
 				})
@@ -128,9 +128,9 @@ func cBlacklistDelDomain() func(c *ghttp.Request) {
 			}
 			err := server.BlacklistDelDomain(req.Domain, u.Name)
 			if err == nil {
-				_ = c.Response.WriteJson(Msg{}.ok(nil))
+				c.Response.WriteJson(Msg{}.ok(nil))
 			} else {
-				_ = c.Response.WriteJson(Msg{}.err("删除失败"))
+				c.Response.WriteJson(Msg{}.err("删除失败"))
 			}
 		}(&ctx.Ctx{Request: c})
 	}

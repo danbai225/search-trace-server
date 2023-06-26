@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	logs "github.com/danbai225/go-logs"
 	"github.com/meilisearch/meilisearch-go"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -45,7 +46,7 @@ func autoMigrate() {
 		}
 	}()
 
-	err = tx.AutoMigrate(&model.User{}, &model.Blacklist{}, &model.Word{})
+	err = tx.AutoMigrate(&model.User{}, &model.Blacklist{}, &model.Word{}, model.Trace{})
 	if err == nil {
 		arr := make([]map[string]interface{}, 0)
 		err = tx.Raw("SHOW INDEX FROM `trace` WHERE Key_name=\"all_text_index\";").Scan(&arr).Error
@@ -55,11 +56,18 @@ func autoMigrate() {
 			} else if strings.ToLower(config.C.SearchEngine) == "meili_search" {
 				tx.Exec("DROP INDEX trace ON all_text_index;")
 				searchClient := GetMeiliSearchClient()
+				resp, err := searchClient.CreateIndex(&meilisearch.IndexConfig{
+					Uid:        "trace",
+					PrimaryKey: "id",
+				})
+				logs.Info(resp, err)
+				if err != nil {
+					panic(err)
+				}
 				index, err2 := searchClient.GetIndex("trace")
 				if err2 != nil {
 					panic(err2)
 				}
-				index.UpdateIndex("id")
 				index.UpdateSettings(&meilisearch.Settings{
 					SearchableAttributes: []string{
 						"title",

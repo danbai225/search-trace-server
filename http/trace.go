@@ -19,7 +19,7 @@ func cTraceAdd() func(r *ghttp.Request) {
 	return func(r *ghttp.Request) {
 		trace := &cTraceAddReq{}
 		if err := r.Parse(trace); err != nil {
-			_ = r.Response.WriteJsonExit(Msg{
+			r.Response.WriteJsonExit(Msg{
 				Code: errCode,
 				Msg:  err.Error(),
 			})
@@ -40,9 +40,9 @@ func cTraceAdd() func(r *ghttp.Request) {
 		}
 		err := traceServer.TraceCreate(&trace2)
 		if err == nil {
-			_ = r.Response.WriteJson(Msg{}.ok(nil))
+			r.Response.WriteJson(Msg{}.ok(nil))
 		} else {
-			_ = r.Response.WriteJson(Msg{}.err("添加失败"))
+			r.Response.WriteJson(Msg{}.err("添加失败"))
 		}
 	}
 }
@@ -57,7 +57,7 @@ func cTraceSearchKeyword() func(r *ghttp.Request) {
 	return func(r *ghttp.Request) {
 		req := &cTraceSearchKeywordReq{}
 		if err := r.Parse(req); err != nil {
-			_ = r.Response.WriteJsonExit(Msg{
+			r.Response.WriteJsonExit(Msg{
 				Code: errCode,
 				Msg:  err.Error(),
 			})
@@ -66,14 +66,14 @@ func cTraceSearchKeyword() func(r *ghttp.Request) {
 		u := r.Context().Value("user").(*model.User)
 		list, PageTotal, total, err := traceServer.TraceSearchForKeyword(u.Name, req.Key, req.PageSize, req.PageNum)
 		if err == nil {
-			_ = r.Response.WriteJson(Msg{}.ok(g.Map{
+			r.Response.WriteJson(Msg{}.ok(g.Map{
 				"list":       list,
 				"page_total": PageTotal,
 				"page_num":   req.PageNum,
 				"total":      total,
 			}))
 		} else {
-			_ = r.Response.WriteJson(Msg{}.err("搜索失败"))
+			r.Response.WriteJson(Msg{}.err("搜索失败"))
 		}
 	}
 }

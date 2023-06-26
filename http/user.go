@@ -19,7 +19,7 @@ func cUserInfo() func(c *ghttp.Request) {
 	return func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
 			u := c.GetUser()
-			_ = c.Response.WriteJson(Msg{}.ok(cUserInfoRes{
+			c.Response.WriteJson(Msg{}.ok(cUserInfoRes{
 				Name:  u.Name,
 				Email: u.Email,
 				Role:  u.Role,
@@ -40,14 +40,14 @@ func cUserAdd() func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
 			u := c.GetUser()
 			if u.Role != admin {
-				_ = c.Response.WriteJsonExit(Msg{
+				c.Response.WriteJsonExit(Msg{
 					Code: errCode,
 					Msg:  "无权限",
 				})
 			}
 			req := &cUserAddReq{}
 			if err := c.Parse(req); err != nil {
-				_ = c.Response.WriteJsonExit(Msg{
+				c.Response.WriteJsonExit(Msg{
 					Code: errCode,
 					Msg:  err.Error(),
 				})
@@ -61,9 +61,9 @@ func cUserAdd() func(c *ghttp.Request) {
 				Role:  0,
 			})
 			if err == nil {
-				_ = c.Response.WriteJson(Msg{}.ok(res))
+				c.Response.WriteJson(Msg{}.ok(res))
 			} else {
-				_ = c.Response.WriteJson(Msg{}.err("创建失败"))
+				c.Response.WriteJson(Msg{}.err("创建失败"))
 			}
 		}(&ctx.Ctx{Request: c})
 	}
@@ -74,16 +74,16 @@ func cUserList() func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
 			u := c.GetUser()
 			if u.Role != admin {
-				_ = c.Response.WriteJsonExit(Msg{
+				c.Response.WriteJsonExit(Msg{
 					Code: errCode,
 					Msg:  "无权限",
 				})
 			}
 			res, err := server.UserList()
 			if err == nil {
-				_ = c.Response.WriteJson(Msg{}.ok(res))
+				c.Response.WriteJson(Msg{}.ok(res))
 			} else {
-				_ = c.Response.WriteJson(Msg{}.err("获取失败"))
+				c.Response.WriteJson(Msg{}.err("获取失败"))
 			}
 		}(&ctx.Ctx{Request: c})
 	}
@@ -98,7 +98,7 @@ func cUserDel() func(c *ghttp.Request) {
 		func(c *ctx.Ctx) {
 			req := &cUserDelReq{}
 			if err := c.Parse(req); err != nil {
-				_ = c.Response.WriteJsonExit(Msg{
+				c.Response.WriteJsonExit(Msg{
 					Code: errCode,
 					Msg:  err.Error(),
 				})
@@ -106,9 +106,9 @@ func cUserDel() func(c *ghttp.Request) {
 			}
 			res, err := server.UserDelete(req.Id)
 			if err == nil {
-				_ = c.Response.WriteJson(Msg{}.ok(res))
+				c.Response.WriteJson(Msg{}.ok(res))
 			} else {
-				_ = c.Response.WriteJson(Msg{}.err("删除失败"))
+				c.Response.WriteJson(Msg{}.err("删除失败"))
 			}
 		}(&ctx.Ctx{Request: c})
 	}

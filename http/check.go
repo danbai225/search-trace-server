@@ -17,7 +17,7 @@ func checkV1(r *ghttp.Request) {
 	user, err := server.UserGetUserByToken(token)
 	if err != nil {
 		r.Response.Status = 401
-		_ = r.Response.WriteJson(Msg{}.err("未授权"))
+		r.Response.WriteJson(Msg{}.err("未授权"))
 		return
 	}
 	r.SetCtxVar("user", user)

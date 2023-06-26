@@ -13,7 +13,7 @@ func cWordAssociate() func(r *ghttp.Request) {
 	return func(r *ghttp.Request) {
 		req := &cWordAssociateReq{}
 		if err := r.Parse(req); err != nil {
-			_ = r.Response.WriteJsonExit(Msg{
+			r.Response.WriteJsonExit(Msg{
 				Code: errCode,
 				Msg:  err.Error(),
 			})
@@ -21,9 +21,9 @@ func cWordAssociate() func(r *ghttp.Request) {
 		}
 		list, err := server.WordAssociate(req.Word)
 		if err == nil {
-			_ = r.Response.WriteJson(Msg{}.ok(list))
+			r.Response.WriteJson(Msg{}.ok(list))
 		} else {
-			_ = r.Response.WriteJson(Msg{}.err("搜索失败"))
+			r.Response.WriteJson(Msg{}.err("搜索失败"))
 		}
 	}
 }
